@@ -99,6 +99,22 @@
     </div>
 
     <div class="form-group">
+      <label for="timezone">{@i18n key="Timezone"/}*:</label>
+      <ui-select ng-model="timezonePicker.selection"
+                 ng-init="timezonePicker.selection = timezonePicker.selection || timezonePicker.weekdays[0]" 
+                 name="timezone"
+                 id="timezone"
+                 required>
+        <ui-select-match placeholder="{@i18n key="Select a timezone..."/}">
+          {{ $select.selected.name }}
+        </ui-select-match>
+        <ui-select-choices repeat="timezone in timezonePicker.timezones">
+          <span ng-bind-html="timezone.name"></span>
+        </ui-select-choices>
+      </ui-select>
+    </div>    
+
+    <div class="form-group">
       <label ng-if="eventInfo.type === 'one-off'" for="date">{@i18n key="Date"/}:</label>
       <label ng-if="eventInfo.type === 'recurring'" for="date">{@i18n key="From"/}:</label>
       <div class="input-group">
@@ -161,6 +177,7 @@
     <div class="form-group" ng-class="{'has-error': eventForm.$submitted && eventForm.city.$error.required}">
       <label for="city">{@i18n key="City"/}*:</label>
       <ui-select ng-model="eventInfo.city"
+                 ng-disabled="pastEvent"
                  name="city"
                  id="city"
                  ng-change="updateLocalStorage('city', eventInfo.city); eventInfo.address = null"

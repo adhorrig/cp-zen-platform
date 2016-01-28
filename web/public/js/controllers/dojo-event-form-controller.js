@@ -237,6 +237,108 @@
       name: $translate.instant('Saturday')
     }];
 
+    $scope.timezonePicker = {};
+    $scope.timezonePicker.timezones = [{
+      id: 0,
+      name: $translate.instant('Greenwich Mean Time (UTC+0)')
+    }, {
+      id: 1,
+      name: $translate.insert('Western European Time (UTC+0)')
+    }, {
+      id: 2
+      name: $translate.insert('Western Sahara Time Zone (UTC+0)')
+    }, {
+      id: 3
+      name: $translate.insert('Central European Time Zone(UTC+1)')
+    }, {
+      id: 4
+      name: $translate.insert('West Africa Time Zone (UTC+1)')
+    }, {
+      id: 5
+      name: $translate.insert('Eastern European Time Zone (UTC+2)')
+    }, {
+      id: 6
+      name: $translate.insert('South Africa Time Zone (UTC+2)')
+    }, {
+      id: 7
+      name: $translate.insert('Central Africa Time Zone (UTC+2)')
+    }, {
+      id: 8
+      name: $translate.insert('Isreal Time Zone (UTC+2)')
+    }, {
+      id: 9
+      name: $translate.insert('Moscow Time Zone (UTC+3)')
+    }, {
+      id: 10
+      name: $translate.insert('Futher-eastern Time Zone ')
+    }, {
+      id: 11
+      name: $translate.insert('Arabia Time Zone (UTC+3)')
+    }, {
+      id: 12
+      name: $translate.insert('Iran Standard Time Zone (UTC+3:30)')
+    }, {
+      id: 13
+      name: $translate.insert('Azerbaijan Time Zone (UTC+4)')
+    }, {
+      id: 14
+      name: $translate.insert('Gulf Time Zone (UTC+4)')
+    }, {
+      id: 15
+      name: $translate.insert('Yekaterinburg Time Zone (UTC+6)')
+    }, {
+      id: 16
+      name: $translate.insert('Omsk Time Zone Zone (UTC+7)')
+    }, {
+      id: 17
+      name: $translate.insert('Krasnoyarsk Time Zone (UTC+7)')
+    }, {
+      id: 18
+      name: $translate.insert('Asia/Shanghai Time Zone (UTC+8)')
+    }, {
+      id: 19
+      name: $translate.insert('Asia/Harbin Time Zone (UTC+8)')
+    }, {
+      id: 20
+      name: $translate.insert('Asia/Chongqing Time Zone (UTC+8)')
+    }, {
+      id: 21
+      name: $translate.insert('Asia / Hong Kong Time Zone (UTC+8)')
+    }, {
+      id: 22
+      name: $translate.insert('Australia Western Time Zone (UTC+8)')
+    }, {
+      id: 23
+      name: $translate.insert('Irkutsk Time Zone (UTC+9)')
+    }, {
+      id: 24
+      name: $translate.insert('Australia Central Time Zone (UTC+9:30)')
+    }, {
+      id: 25
+      name: $translate.insert('Yatutsk Time Zone (UTC+10)')
+    }, {
+      id: 26
+      name: $translate.insert('Australia Eastern Time Zone (UTC+10)')
+    }, {
+      id: 27
+      name: $translate.insert('Vladivostok Standard Time Zone (UTC+11)')
+    }, {
+      id: 28
+      name: $translate.insert('Eastern Standard Time Zone (UTC-5)')
+    }, {
+      id: 29
+      name: $translate.insert('Central Standard Time Zone (UTC-6)')
+    }, {
+      id: 30
+      name: $translate.insert('Mountain Standard Time Zone (UTC-7)')
+    }, {
+      id: 31
+      name: $translate.insert('Pacific Standard Time Zone (UTC-8)')
+    }, {
+      id: 32
+      name: $translate.insert('Huwaii-Aleutian Time Zone (UTC-10)')
+    }];
+
     $scope.searchCity = function($select) {
       if($scope.hasAccess) {
         return utilsService.getPlaces($scope.eventInfo.country.alpha2, $select).then(function (data) {
@@ -650,6 +752,10 @@
         var eventDay =  moment.utc(_.first(event.dates).startTime, 'YYYY-MM-DD HH:mm:ss').format('dddd');
         $scope.weekdayPicker.selection = _.find($scope.weekdayPicker.weekdays, function (dayObject) {
           return dayObject.name === $translate.instant(eventDay);
+        });
+
+        $scope.timezonePicker.selection = _.find($scope.timezonePicker.timezones, function (timezoneObject) {
+          return timezoneObject.name;
         });
 
         $scope.eventInfo.fixedStartDateTime = event.startTime;
