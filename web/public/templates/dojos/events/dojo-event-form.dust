@@ -99,20 +99,20 @@
     </div>
 
     <div class="form-group">
-      <label for="timezone">{@i18n key="Timezone"/}*:</label>
-      <ui-select ng-model="timezonePicker.selection"
-                 ng-init="timezonePicker.selection = timezonePicker.selection || timezonePicker.weekdays[0]" 
-                 name="timezone"
-                 id="timezone"
-                 required>
-        <ui-select-match placeholder="{@i18n key="Select a timezone..."/}">
-          {{ $select.selected.name }}
-        </ui-select-match>
-        <ui-select-choices repeat="timezone in timezonePicker.timezones">
-          <span ng-bind-html="timezone.name"></span>
-        </ui-select-choices>
-      </ui-select>
-    </div>    
+      <label for="timezone">{@i18n key="Select your time zone"/}*</label>
+      <div ng-class="{'has-error': eventForm.$submitted && eventForm.timezone.$error.required}">
+        <div>
+          <ui-select required name="timezone" ng-model="eventInfo.timezone" ng-change="updateLocalStorage('timezone','eventInfo.timezone'">
+              <ui-select-match placeholder="{@i18n key="Select your timezone"/}">{{ $select.selected }}</ui-select-match>
+              <ui-select-choices repeat="timezone in timezones">
+                <span ng-bind-html="timezone"></span>
+              </ui-select-choices>
+          </ui-select>
+          <label class="control-label has-error validationMessage"
+            ng-show="eventForm.$submitted && eventForm.timezone.$error.required">{@i18n key="Please select your timezone"/}</label>
+        </div>
+      </div>
+    </div>
 
     <div class="form-group">
       <label ng-if="eventInfo.type === 'one-off'" for="date">{@i18n key="Date"/}:</label>
