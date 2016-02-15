@@ -32,10 +32,10 @@
 
     $scope.isNotPast = function(event) {
       if(event.type === 'recurring'){
-        var dateOfLastEventRecurrence = _.last(event.dates).startTime;
+        var dateOfLastEventRecurrence = _.head(event.dates).startTime;
         return moment.utc(dateOfLastEventRecurrence).subtract(utcOffset, 'minutes').diff(moment.utc(), 'minutes') > 0;
       } else {
-        var oneOffEventDate = _.first(event.dates).startTime;
+        var oneOffEventDate = _.head(event.dates).startTime;
         return moment.utc(oneOffEventDate).subtract(utcOffset, 'minutes').diff(moment.utc(), 'minutes') > 0;
       }
     };
