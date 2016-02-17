@@ -237,8 +237,8 @@ msgstr "CoderDojo Foundation reserves the right, at our discretion, to change, m
 msgid "SECTION 5 - USER CONTENT LICENSE GRANT; REPRESENTATIONS AND WARRANTIES"
 msgstr "SECTION 5 - USER CONTENT LICENSE GRANT; REPRESENTATIONS AND WARRANTIES"
 
-msgid "CoderDojo Foundation may permit (a) the posting and/or publishing by You and other Users of notes, questions, comments, ratings, reviews, images, videos and other audio-visual materials and communications (collectively, \"User Postings\") and (b) the posting, creation, or modification by You and other users of computer code (including source code and object code) (\"User Code\|) (User Postings and User Code, collectively, \"User Content\"). You understand that whether or not such User Content is published, CoderDojo Foundation does not guarantee any confidentiality with respect to any submissions."
-msgstr "CoderDojo Foundation may permit (a) the posting and/or publishing by You and other Users of notes, questions, comments, ratings, reviews, images, videos and other audio-visual materials and communications (collectively, \"User Postings\") and (b) the posting, creation, or modification by You and other users of computer code (including source code and object code) (\"User Code\|) (User Postings and User Code, collectively, \"User Content\"). You understand that whether or not such User Content is published, CoderDojo Foundation does not guarantee any confidentiality with respect to any submissions."
+msgid "CoderDojo Foundation may permit (a) the posting and/or publishing by You and other Users of notes, questions, comments, ratings, reviews, images, videos and other audio-visual materials and communications (collectively, \"User Postings\") and (b) the posting, creation, or modification by You and other users of computer code (including source code and object code) (\"User Code\") (User Postings and User Code, collectively, \"User Content\"). You understand that whether or not such User Content is published, CoderDojo Foundation does not guarantee any confidentiality with respect to any submissions."
+msgstr "CoderDojo Foundation may permit (a) the posting and/or publishing by You and other Users of notes, questions, comments, ratings, reviews, images, videos and other audio-visual materials and communications (collectively, \"User Postings\") and (b) the posting, creation, or modification by You and other users of computer code (including source code and object code) (\"User Code\") (User Postings and User Code, collectively, \"User Content\"). You understand that whether or not such User Content is published, CoderDojo Foundation does not guarantee any confidentiality with respect to any submissions."
 
 msgid "License Grant to CoderDojo Foundation."
 msgstr "License Grant to CoderDojo Foundation."
@@ -292,7 +292,7 @@ msgid "SECTION 8 - INDEMNIFICATION"
 msgstr "SECTION 8 - INDEMNIFICATION"
 
 msgid "You agree to indemnify The CoderDojo Foundation, and all their affiliates, employees, faculty members, fellows, students, agents, representatives, third party service providers, and members of their governing boards (all of which are \"CoderDojo Entities\"), and to defend and hold each of them harmless, from any and all claims and liabilities (including attorneys' fees) arising out of or related to your breach of the Terms of Service or your use of Zen."
-msgstr "You agree to indemnify The CoderDojo Foundation, and all their affiliates, employees, faculty members, fellows, students, agents, representatives, third party service providers, and members of their governing boards (all of which are "CoderDojo Entities"), and to defend and hold each of them harmless, from any and all claims and liabilities (including attorneys' fees) arising out of or related to your breach of the Terms of Service or your use of Zen."
+msgstr "You agree to indemnify The CoderDojo Foundation, and all their affiliates, employees, faculty members, fellows, students, agents, representatives, third party service providers, and members of their governing boards (all of which are \"CoderDojo Entities\"), and to defend and hold each of them harmless, from any and all claims and liabilities (including attorneys' fees) arising out of or related to your breach of the Terms of Service or your use of Zen."
 
 msgid "SECTION 9 - DISCLAIMER OF WARRANTY"
 msgstr "SECTION 9 - DISCLAIMER OF WARRANTY"
@@ -1768,8 +1768,8 @@ msgstr "Create a plan for what content you would like to cover with your mentors
 msgid "See <a href='http://kata.coderdojo.com/wiki/Learning_Resource' target='_blank'>Kata</a>, the CoderDojo community wiki for more information on learning resources"
 msgstr "See <a href='http://kata.coderdojo.com/wiki/Learning_Resource' target='_blank'>Kata</a>, the CoderDojo community wiki for more information on learning resources"
 
-msgid "Many Dojos start with Scratch or dive straight into HTML. See Kata, the CoderDojo community wiki for <a href="http://kata.coderdojo.com/wiki/Learning_Resource">more information on learning resources.</a>"
-msgstr "Many Dojos start with Scratch or dive straight into HTML. See Kata, the CoderDojo community wiki for <a href="http://kata.coderdojo.com/wiki/Learning_Resource">more information on learning resources.</a>"
+msgid "Many Dojos start with Scratch or dive straight into HTML. See Kata, the CoderDojo community wiki for <a href=\"http://kata.coderdojo.com/wiki/Learning_Resource\">more information on learning resources.</a>"
+msgstr "Many Dojos start with Scratch or dive straight into HTML. See Kata, the CoderDojo community wiki for <a href=\"http://kata.coderdojo.com/wiki/Learning_Resource\">more information on learning resources.</a>"
 
 msgid "Setup ticketing and registration for your Dojo"
 msgstr "Setup ticketing and registration for your Dojo"
@@ -1807,8 +1807,8 @@ msgstr "Please describe how you have background checked your team."
 msgid "Set up background checking for all volunteers."
 msgstr "Set up background checking for all volunteers."
 
-msgid "The requirements for background checking are specific to the legislation in your jurisdiction. You can see some guidelines on Child Protection and Background Checking on <a href="http://kata.coderdojo.com/wiki/Child_Protection_and_Background_Checking">Kata</a>. Please also ensure you check your local legislation. Please comment below describing the situation in your local Dojo."
-msgstr "The requirements for background checking are specific to the legislation in your jurisdiction. You can see some guidelines on Child Protection and Background Checking on <a href="http://kata.coderdojo.com/wiki/Child_Protection_and_Background_Checking">Kata</a>. Please also ensure you check your local legislation. Please comment below describing the situation in your local Dojo."
+msgid "The requirements for background checking are specific to the legislation in your jurisdiction. You can see some guidelines on Child Protection and Background Checking on <a href=\"http://kata.coderdojo.com/wiki/Child_Protection_and_Background_Checking\">Kata</a>. Please also ensure you check your local legislation. Please comment below describing the situation in your local Dojo."
+msgstr "The requirements for background checking are specific to the legislation in your jurisdiction. You can see some guidelines on Child Protection and Background Checking on <a href=\"http://kata.coderdojo.com/wiki/Child_Protection_and_Background_Checking\">Kata</a>. Please also ensure you check your local legislation. Please comment below describing the situation in your local Dojo."
 
 msgid "A suitable venue has tables, chairs, heat and ideally, wifi! Canteens, community centers, libraries, schools and corporate offices all make great venues. Venues should not replicate a teacher led classroom environment, instead rearrange the desks and chairs, put youths together and ensure there is space for mentors to walk around and assist the young people. Dojos should only be hosted in public spaces, you cannot host your Dojo in a private residence!"
 msgstr "A suitable venue has tables, chairs, heat and ideally, wifi! Canteens, community centers, libraries, schools and corporate offices all make great venues. Venues should not replicate a teacher led classroom environment, instead rearrange the desks and chairs, put youths together and ensure there is space for mentors to walk around and assist the young people. Dojos should only be hosted in public spaces, you cannot host your Dojo in a private residence!"
@@ -2075,8 +2075,8 @@ msgstr "Optionally describe how this was achieved."
 msgid "Our Dojo abides by data protection regulations in our jurisdiction"
 msgstr "Our Dojo abides by data protection regulations in our jurisdiction"
 
-msgid "Inclusion is a fundamental principle of CoderDojo, <a href="http://kata.coderdojo.com/wiki/Guiding_Principles_and_Philosophies#Inclusion_Statement">read our short inclusion statement and confirm you and your mentors are in agreement.</a>"
-msgstr "Inclusion is a fundamental principle of CoderDojo, <a href="http://kata.coderdojo.com/wiki/Guiding_Principles_and_Philosophies#Inclusion_Statement">read our short inclusion statement and confirm you and your mentors are in agreement.</a>"
+msgid "Inclusion is a fundamental principle of CoderDojo, <a href=\"http://kata.coderdojo.com/wiki/Guiding_Principles_and_Philosophies#Inclusion_Statement\">read our short inclusion statement and confirm you and your mentors are in agreement.</a>"
+msgstr "Inclusion is a fundamental principle of CoderDojo, <a href=\"http://kata.coderdojo.com/wiki/Guiding_Principles_and_Philosophies#Inclusion_Statement\">read our short inclusion statement and confirm you and your mentors are in agreement.</a>"
 
 msgid "Our Dojo will work to engage with and improve the greater CoderDojo movement by:"
 msgstr "Our Dojo will work to engage with and improve the greater CoderDojo movement by:"
@@ -2177,8 +2177,8 @@ msgstr "Online Safety: Ensure all mentors have read the Online Safety 101 docume
 msgid "Please see Online Safety 101 for Mentors <a href='https://docs.google.com/document/d/1DDwpYKBltkJXH15pr_p2Ig0_9l4Uq2TdE7zG_9QsdjI/edit?usp=sharing' target='_blank'>here</a> and Online Safety 101 for Ninjas <a href='https://docs.google.com/document/d/1BIhYjhOiTxeFdbBRVouBZQRWLQD_v-gCkCIYtDcP2CM/edit?usp=sharing' target='_blank'>here</a>"
 msgstr "Please see Online Safety 101 for Mentors <a href='https://docs.google.com/document/d/1DDwpYKBltkJXH15pr_p2Ig0_9l4Uq2TdE7zG_9QsdjI/edit?usp=sharing' target='_blank'>here</a> and Online Safety 101 for Ninjas <a href='https://docs.google.com/document/d/1BIhYjhOiTxeFdbBRVouBZQRWLQD_v-gCkCIYtDcP2CM/edit?usp=sharing' target='_blank'>here</a>"
 
-msgid "Data protection is increasingly becoming an important topic, <a href="http://kata.coderdojo.com/wiki/Data_Protection_101">here are some simple tips to make sure you stay informed</a>."
-msgstr "Data protection is increasingly becoming an important topic, <a href="http://kata.coderdojo.com/wiki/Data_Protection_101">here are some simple tips to make sure you stay informed</a>."
+msgid "Data protection is increasingly becoming an important topic, <a href=\"http://kata.coderdojo.com/wiki/Data_Protection_101\">here are some simple tips to make sure you stay informed</a>."
+msgstr "Data protection is increasingly becoming an important topic, <a href=\"http://kata.coderdojo.com/wiki/Data_Protection_101\">here are some simple tips to make sure you stay informed</a>."
 
 msgid "You can see more information on Data Protection <a href='https://docs.google.com/document/d/18XQNYEMQrBDJoR0Gt1ryC6CzxDEd_k41p4PEeKYtIxE/edit?usp=sharing' target='_blank'>here</a>"
 msgstr "You can see more information on Data Protection <a href='https://docs.google.com/document/d/18XQNYEMQrBDJoR0Gt1ryC6CzxDEd_k41p4PEeKYtIxE/edit?usp=sharing' target='_blank'>here</a>"
@@ -2649,8 +2649,17 @@ msgstr "Invitation successfully validated. Your ticket has been sent to your ema
 msgid "Invalid session invitation."
 msgstr "Invalid session invitation."
 
-msgid "Only the invited user can accept this invitation."
-msgstr "Only the invited user can accept this invitation."
+msgid "Cancelling Ticket"
+msgstr "Cancelling Ticket"
+
+msgid "Ticket is being cancelled..."
+msgstr "Ticket is being cancelled..."
+
+msgid "Thank you for confirming you will not be in attendance; your application has now been cancelled."
+msgstr "Thank you for confirming you will not be in attendance; your application has now been cancelled."
+
+msgid "Invalid application cancellation link."
+msgstr "Invalid application cancellation link."
 
 msgid "No invites found"
 msgstr "No invites found"
@@ -2920,10 +2929,8 @@ msgstr "Any changes to this Privacy Statement will be posted on the Website so y
 msgid "Contact"
 msgstr "Contact"
 
-msgid "We welcome any queries, comments or requests you may have regarding this Privacy Statement.  Please contact us in writing at Dogpatch Labs, The CHQ Building, Custom House Quay, Dublin 1, IRELAND or by e-mail at info@coderdojo.com.
-"
-msgstr "We welcome any queries, comments or requests you may have regarding this Privacy Statement.  Please contact us in writing at Dogpatch Labs, The CHQ Building, Custom House Quay, Dublin 1, IRELAND or by e-mail at info@coderdojo.com.
-"
+msgid "We welcome any queries, comments or requests you may have regarding this Privacy Statement.  Please contact us in writing at Dogpatch Labs, The CHQ Building, Custom House Quay, Dublin 1, IRELAND or by e-mail at info@coderdojo.com."
+msgstr "We welcome any queries, comments or requests you may have regarding this Privacy Statement.  Please contact us in writing at Dogpatch Labs, The CHQ Building, Custom House Quay, Dublin 1, IRELAND or by e-mail at info@coderdojo.com."
 
 msgid "Find nearby Dojos"
 msgstr "Find nearby Dojos"

@@ -87,6 +87,7 @@
   }
 
   function dojoEventFormCtrl($scope, $stateParams, $state, $sce, $localStorage, $modal, cdEventsService, cdDojoService, cdUsersService, auth, $translate, cdLanguagesService, usSpinnerService, alertService, utilsService, ticketTypes, currentUser) {
+    console.log("this is local storage: "+$localStorage);
     var dojoId = $stateParams.dojoId;
     var now = moment.utc().toDate();
     var defaultEventTime = moment.utc(now).add(2, 'hours').toDate();
@@ -380,7 +381,9 @@
 
     $scope.scrollToInvalid = function (form) {
         if (form.$invalid) {
-            angular.element('form[name=' + form.$name + '] .ng-invalid')[0].scrollIntoView();
+            angular.element('form[name=' + form.$name + '] .ng-invalid')[0].scrollIntoView(); //form[name=eventForm] .ng-invalid
+            console.log('form[name=' + form.$name + '] .ng-invalid');
+
         } else {
             $scope.eventInfo.publish=true;
         }
@@ -668,8 +671,6 @@
         $scope.editorOptions = {
           readOnly: $scope.pastEvent,
           language: 'en',
-          uiColor: '#000000',
-          height: '200px'
         };
 
         done(null, event);
