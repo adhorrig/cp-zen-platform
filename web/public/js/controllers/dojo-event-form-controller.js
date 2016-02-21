@@ -3,7 +3,7 @@
   'use strict';
 
   function getEveryTargetWeekdayInDateRange(startDateTime, endDateTime, targetWeekday, eventType) {
-    endDateTime = moment.utc(endDateTime).add(1, 'days'); //Fixes the while loop on #28 exiting a day short
+    endDateTime = moment.utc(endDateTime).add(1, 'days');
     var currentDate = startDateTime;
     var dates = [];
     var biWeeklyEventSwitch = false;
@@ -639,19 +639,10 @@
         event.startTime = moment(startTime).subtract(startDateUtcOffset, 'minutes').toDate();
         event.endTime = moment(endTime).subtract(endDateUtcOffset, 'minutes').toDate();
         event.createdAt = new Date(event.createdAt);
-        
-        //manually cconstruct date object to keep local
-        var startYear = startTime.slice(0,4);
-        var startMonth = startTime.slice(5,7);
-        var startDay = startTime.slice(8,10);
-
-        var endYear = endTime.slice(0,4);
-        var endMonth = endTime.slice(5,7);
-        var endDay = endTime.slice(8,10);
-
-        event.date = new Date(startYear, startMonth-1, startDay);
-        event.toDate = new Date(endYear, endMonth-1, endDay);
-
+        event.date = event.startTime;
+        var lastEventOcurrance = _.last(event.dates).startTime || moment.utc().toISOString();
+        var momentLEO = moment(lastEventOcurrance);
+        event.toDate = new Date(momentLEO);
         var eventDay =  moment.utc(_.first(event.dates).startTime, 'YYYY-MM-DD HH:mm:ss').format('dddd');
         $scope.weekdayPicker.selection = _.find($scope.weekdayPicker.weekdays, function (dayObject) {
           return dayObject.name === $translate.instant(eventDay);
