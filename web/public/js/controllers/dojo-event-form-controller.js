@@ -641,7 +641,6 @@
         event.createdAt = new Date(event.createdAt);
         event.date = event.startTime;
         var lastEventOcurrance = _.last(event.dates).startTime || moment.utc().toISOString();
-        var momentLEO = moment(lastEventOcurrance);
         event.toDate = new Date(lastEventOcurrance.replace(/-/g, '\/').replace(/T.+/, ''));
         var eventDay =  moment.utc(_.first(event.dates).startTime, 'YYYY-MM-DD HH:mm:ss').format('dddd');
         $scope.weekdayPicker.selection = _.find($scope.weekdayPicker.weekdays, function (dayObject) {
