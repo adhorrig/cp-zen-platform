@@ -46,10 +46,8 @@
       <label>{@i18n key="Type"/}:</label>
 
       <div class="radio">
-        <input ng-disabled="pastEvent" type="radio" name="type" ng-model="eventInfo.type" ng-change="updateLocalStorage('type',eventInfo.type)" id="recurring" value="recurring">
-        <label for="recurring">
-          {@i18n key="Recurring"/}*:
-        </label>
+        <input id="recurringRadio" ng-disabled="pastEvent" type="radio" name="type" ng-model="eventInfo.type" ng-change="updateLocalStorage('type',eventInfo.type)" id="recurring" value="recurring">
+        <label for="recurring">{@i18n key="Recurring"/}*:</label>
       </div>
 
       <div class="radio">
@@ -273,9 +271,9 @@
     </div>
 
     <div class="btn-toolbar">
-      <button type="button" class="btn btn-default" ng-click="cancel($event)">{@i18n key="Cancel"/}</button>
-      <button ng-if="!pastEvent" type="submit" class="btn btn-primary" >{@i18n key="Save Draft"/}</button>
-      <button ng-if="!pastEvent" type="submit" class="btn btn-success" ng-click="scrollToInvalid(eventForm)">{@i18n key="Publish"/}</button>
+      <button name="cancel" type="button" class="btn btn-default" ng-click="cancel($event)">{@i18n key="Cancel"/}</button>
+      <button name="saveDraft" ng-if="!pastEvent" type="submit" class="btn btn-primary" >{@i18n key="Save Draft"/}</button>
+      <button name="publish" ng-if="!pastEvent" type="submit" class="btn btn-success" ng-click="scrollToInvalid(eventForm)">{@i18n key="Publish"/}</button>
     </div>
   </form>
 
