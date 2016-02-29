@@ -21,7 +21,7 @@
 
     <div class="form-group form-inline" ng-show="!eventInfo.status">
       <div class="checkbox">
-        <input type="checkbox" id="prefill-address" ng-model="eventInfo.prefillAddress" ng-click="prefillDojoAddress()">
+        <input name="prefill-address" type="checkbox" id="prefill-address" ng-model="eventInfo.prefillAddress" ng-click="prefillDojoAddress()">
         <label for="prefill-address">
           {@i18n key="Use Dojo listing address"/}
         </label>
