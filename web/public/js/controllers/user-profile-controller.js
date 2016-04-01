@@ -570,25 +570,6 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
       }
   };
 
-  $scope.profile.children = [{childName: null, childAlias: null, childDateOfBirth: null, childEmail: null, childGender: null}];
-
-  $scope.addChild = function () {
-    if($scope.profile.children.length === 10) return alertService.showError($translate.instant('You can only have a maximum of 10 kids'));
-    var child = {
-      name: null,
-      alias: null,
-      dateOfBirth: null,
-      email: null,
-      gender: null
-    };
-    $scope.profile.children.push(child);
-  };
-
-  $scope.removeChild = function ($index) {
-      if($scope.profile.children.length === 1) return alertService.showAlert($translate.instant('As a parent, your profile must contain at least one youth.'));
-      return $scope.profile.children.splice($index, 1);
-    };
-
 }
 
 angular.module('cpZenPlatform')

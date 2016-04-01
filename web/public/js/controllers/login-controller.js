@@ -36,6 +36,7 @@ function loginCtrl($state, $stateParams, $scope, $rootScope, $location, $window,
     var userType = _.find($scope.initUserTypes, function(type) { return type.name===$state.params.userType});
     if (userType) {
       $scope.registerUser = {initUserType: userType};
+      console.log($scope.registerUser);
     }
   });
 
@@ -291,4 +292,40 @@ function loginCtrl($state, $stateParams, $scope, $rootScope, $location, $window,
   });
 
   $scope.recap = {publicKey: '6LfVKQgTAAAAAF3wUs0q-vfrtsKdHO1HCAkp6pnY'};
+
+  $scope.children = [{childName: null, childAlias: null, childDateOfBirth: null, childEmail: null, childGender: null}];
+
+  $scope.addChild = function () {
+    if($scope.children.length === 10) return alertService.showError($translate.instant('You can only have a maximum of 10 kids'));
+    var child = {
+      name: null,
+      alias: null,
+      dateOfBirth: null,
+      email: null,
+      gender: null
+    };
+    $scope.children.push(child);
+  };
+
+  $scope.removeChild = function ($index) {
+    if($scope.children.length === 0) return alertService.showAlert($translate.instant('You have no children to remove'));
+    return $scope.children.splice($index, 1);
+  };
+
+  $scope.open = function ($event, opened) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    opened.isOpen = true;
+  };
+
+  var initialDate = new Date();
+  initialDate.setFullYear(initialDate.getFullYear()-18);
+  $scope.dobDateOptions = $scope.childDobDateOptions = {
+    formatYear: 'yyyy',
+    startingDay: 1,
+    'datepicker-mode': "'year'",
+    initDate: initialDate
+  };
+
 }
+
