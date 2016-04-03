@@ -53,7 +53,7 @@
     </div>
 
     <legend>{@i18n key="Add children to your account - optional"/}</legend>
-    <div class="row cd-input-row" ng-disabled="underThirteen()" ng-repeat="child in children" ng-init="childIndex = $index">
+    <div class="row cd-input-row" ng-repeat="child in children" ng-init="childIndex = $index">
       <label>{@i18n key="Children details"/}</label>
 
       <div class="margin-top-point-5-em">
@@ -66,7 +66,7 @@
       <div class="row cd-input-row" ng-enter="noop()">
         <div class="form-group">
           <div class="col-lg-offset-3 col-lg-6">
-              <input ng-disabled="emailRequired()" name="childFullname" type="text" required required-message="'{@i18n key="Name is required"/}'"class="form-control" id="childFullname" placeholder="{@i18n key="Name"/}" ng-model="child.name">
+              <input name="childFullname-{{ childIndex }}" type="text" required required-message="'{@i18n key="Name is required"/}'"class="form-control" id="childFullname" placeholder="{@i18n key="Name"/}" ng-model="child.name">
           </div>
         </div>
       </div>
@@ -74,7 +74,7 @@
       <div class="row cd-input-row" ng-enter="noop()">
         <div class="form-group">
           <div class="col-lg-offset-3 col-lg-6">
-            <input name="childAlias" type="text" required required-message="'{@i18n key="Alias is required"/}'" class="form-control" id="childFullname" placeholder="{@i18n key="Alias"/}" ng-model="child.alias">
+            <input name="childAlias-{{ childIndex }}" type="text" required required-message="'{@i18n key="Alias is required"/}'" class="form-control" id="childFullname" placeholder="{@i18n key="Alias"/}" ng-model="child.alias">
           </div>
         </div>
       </div>
@@ -82,7 +82,7 @@
       <div class="row cd-input-row" ng-enter="noop()">
         <div class="form-group">
           <div class="col-lg-offset-3 col-lg-6" style="padding-right: 15px; padding-left: 15px;">
-            <input type="text" class="form-control" readonly datepicker-popup="{{ fullDateFormat }}" datepicker-options="childDobDateOptions" min-date="'1900-01-01'" max-date="today" ng-model="child.childDob" name="childDateOfBirth" required-message="'{@i18n key="Date of birth is empty"/}'" is-open="child.isOpen" required current-text="{@i18n key="Today"/}" clear-text="{@i18n key="Clear"/}" close-text="{@i18n key="Done"/}" placeholder="{@i18n key="Enter your childs date of birth here..."/}" ng-click="open($event, child)" />
+            <input type="text" class="form-control" readonly datepicker-popup="{{ fullDateFormat }}" datepicker-options="childDobDateOptions" min-date="'1900-01-01'" max-date="today" ng-model="child.childDob" name="childDateOfBirth-{{ childIndex }}" required-message="'{@i18n key="Date of birth is empty"/}'" is-open="child.isOpen" required current-text="{@i18n key="Today"/}" clear-text="{@i18n key="Clear"/}" close-text="{@i18n key="Done"/}" placeholder="{@i18n key="Enter your childs date of birth here..."/}" ng-click="open($event, child)" />
             <span class="input-group-btn" ng-class="{'topValign':user-registration-form.$submitted && user-registration-form.dateOfBirth.$error.required}">
             <button type="button" class="btn btn-default" ng-click="open($event, child)"><i class="glyphicon glyphicon-calendar"></i></button></span>
           </div>
@@ -92,7 +92,7 @@
       <div class="row cd-input-row" ng-enter="noop()">
         <div class="form-group">
           <div class="col-lg-offset-3 col-lg-6">
-            <input type="email" ng-required="isEmailRequired()" required-message="'{@i18n key="Email is required"/}'" class="form-control" id="childEmail" name="childEmail" ng-required="true" placeholder="{@i18n key="Child Email"/}" ng-model="child.email">
+            <input type="email" required required-message="'{@i18n key="Email is required"/}'" class="form-control" id="childEmail" name="childEmail-{{ childIndex }}" ng-required="true" placeholder="{@i18n key="Child Email"/}" ng-model="child.email">
           </div>
         </div>
       </div>
@@ -101,15 +101,15 @@
         <div class="form-group">
           <div class="col-lg-offset-3 col-lg-6">
             <div class="radio">
-              <input type="radio" ng-model="child.gender" name="childGender" id="female" value="Female">
+              <input type="radio" ng-model="child.gender" name="childGender-{{ childIndex }}" id="female" value="Female">
               <label for="female">{@i18n key="Female"/}</label>
             </div>
             <div class="radio">
-              <input type="radio" ng-model="child.gender" name="childGender" id="male" value="Male">
+              <input type="radio" ng-model="child.gender" name="childGender-{{ childIndex }}" id="male" value="Male">
               <label for="male">{@i18n key="Male"/}</label>
             </div>
             <div class="radio">
-              <input type="radio" ng-model="child.gender" name="childGender" id="undisclosed" value="Undisclosed">
+              <input type="radio" ng-model="child.gender" name="childGender-{{ childIndex }}" id="undisclosed" value="Undisclosed">
               <label for="undisclosed">{@i18n key="Undisclosed"/}</label>
             </div>
           </div>

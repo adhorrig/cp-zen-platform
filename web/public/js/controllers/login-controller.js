@@ -320,7 +320,7 @@ function loginCtrl($state, $stateParams, $scope, $rootScope, $location, $window,
 
   var initialDate = new Date();
   initialDate.setFullYear(initialDate.getFullYear()-18);
-  $scope.dobDateOptions = $scope.childDobDateOptions = {
+  $scope.childDobDateOptions = {
     formatYear: 'yyyy',
     startingDay: 1,
     'datepicker-mode': "'year'",
