@@ -32,7 +32,6 @@
       <span class="help-block"></span>
       <button ng-if="!editMode && loggedInUser && ((loggedInUser.id === profile.userId) || profile.myChild)" class="btn btn-default btn-block" ng-click="editProfile()">{@i18n key="Edit Profile"/}</button>
       <span class="help-block"></span>
-
       <span class="help-block"></span>
 
       <button ng-if="editMode && currentStateName !== 'add-child'" class="btn btn-default btn-block" ng-click="viewProfile()">{@i18n key="View Profile"/}</button>
@@ -110,6 +109,7 @@
       <programming-languages-list ng-if="!hideProfileBlock('programmingLanguages') && hasAccess(profile.userTypes, ['mentor', 'champion'])"></programming-languages-list>
       <languages-spoken-list ng-if="!hideProfileBlock('languagesSpoken') && hasAccess(profile.userTypes, ['mentor', 'champion'])" ></languages-spoken-list>
       <parents-list ng-if="!hideProfileBlock() && hasAccess(profile.userTypes, ['attendee-u13', 'attendee-o13'])"></parents-list>
+      <children-list ng-if="loggedInUserIsCDFAdmin() || hasAccess(profile.userTypes, ['parent-guardian'])"></children-list>
       <badges-list ng-if="!hideProfileBlock('badges')"></badges-list>
       <notes ng-if="!hideChampionProfileBlock('notes') && hasAccess(profile.userTypes, ['champion'])"></notes>
 

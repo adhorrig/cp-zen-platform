@@ -1,5 +1,5 @@
 <div ng-if="editMode">
-  <legend class="legend-color-1-border">{@i18n key="Your Details"/}</legend>
+  <legend class="legend-color-1-border">{@i18n key="Your Details"/}<span tooltip="{@i18n key="We here at the CoderDojo Foundation take your security very seriously. Your personal information will never be shared. It is used purely for statistical analysis."/}" tooltip-placement="right" class="glyphicon glyphicon-info-sign"></span></legend>
   <div class="panel-body">
     <div>
       <div ng-if="!profile.ownProfileFlag && !profile.myChild">
