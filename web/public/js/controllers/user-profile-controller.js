@@ -337,10 +337,10 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
 
   $scope.picker = {opened: false};
 
-  $scope.open = function ($event) {
+  $scope.open = function ($event, opened) {
     $event.preventDefault();
     $event.stopPropagation();
-    $scope.picker.opened = true;
+    opened.isOpen = true;
   };
 
   cdDojoService.listCountries(function(countries) {
@@ -349,7 +349,7 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
 
   var initialDate = new Date();
   initialDate.setFullYear(initialDate.getFullYear()-18);
-  $scope.dobDateOptions = {
+  $scope.dobDateOptions = $scope.childDobDateOptions = {
     formatYear: 'yyyy',
     startingDay: 1,
     'datepicker-mode': "'year'",
@@ -585,6 +585,27 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
     }
     return true;
   };
+
+  $scope.profile.children = [{childName: null, childAlias: null, childDateOfBirth:null, childEmail: null, childGender: null}];
+
+  $scope.addChild = function () {
+    if($scope.profile.children.length === 10) return alertService.showError($translate.instant('You can only have a maximum of ten children'));
+    var child = {
+      name: null,
+      alias: null,
+      dateOfBirth: null,
+      email: null,
+      gender: null
+    };
+    $scope.profile.children.push(child);
+  }
+
+  $scope.removeChild = function ($index) {
+    if($scope.profile.children.length === 0) return alertService.showAlert($translate.instant('You have no children to remove'));
+    return $scope.profile.children.splice($index, 1);
+  };
+
+
 }
 
 angular.module('cpZenPlatform')
