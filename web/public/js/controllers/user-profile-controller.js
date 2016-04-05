@@ -565,11 +565,26 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
   }
 
   $scope.scrollToInvalid = function (form) {
-      if (form.$invalid) {
-          angular.element('form[name=' + form.$name + '] .ng-invalid')[0].scrollIntoView();
-      }
+    if (form.$invalid) {
+      angular.element('form[name=' + form.$name + '] .ng-invalid')[0].scrollIntoView();
+    }
   };
 
+  $scope.initialForm = function () {
+    if($scope.referer === 'http://localhost:8000/register'){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  $scope.abilityToAddChildren = function (){
+    if($scope.profile && ($scope.profile.userTypes.indexOf('attendee-u13') > -1 ||
+       $scope.profile.userTypes.indexOf('attendee-o13') > -1)){
+      return false;
+    }
+    return true;
+  };
 }
 
 angular.module('cpZenPlatform')
