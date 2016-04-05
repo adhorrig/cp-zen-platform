@@ -1,4 +1,4 @@
-<div id="ninjaProfileBlock" class="profile-section">
+<div id="ninjaProfileBlock" class="profile-section" ng-show="initialForm()">
   <a name="youths"></a>
   <legend class="legend-color-3-border">{@i18n key="Youths"/}</legend>
   <div class="col-xs-12" ng-show="initialForm()">
