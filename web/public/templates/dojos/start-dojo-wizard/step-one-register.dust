@@ -1,7 +1,7 @@
 <div id="main" class="user-registration cd-color-4-underline">
   <form id="user-registration-form" name="registerForm" novalidate angular-validator angular-validator-submit="doRegister(registerUser)" role="form" class="form-horizonal">
     <div class="alert alert-info" ng-show="showBanner()">
-      <strong>{@i18n key="Registering for an event?"/}</strong><br />
+      <strong>{@i18n key="You must register before you can join a Dojo."/}</strong><br />
       {@i18n key="Registering an account does not guarantee you entry to a Dojo event. To gain entry to an event you must fill out your profile and book via the Dojo listing page. You will need your email confirmation to attend or direct permission from the Dojo administrators."/}
     </div>
     <legend>{@i18n key="Register an account"/}</legend>

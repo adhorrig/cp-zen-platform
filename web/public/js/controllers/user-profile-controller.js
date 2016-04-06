@@ -603,10 +603,16 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
   }
 
   $scope.removeChild = function ($index) {
-    if($scope.profile.children.length === 0) return alertService.showAlert($translate.instant('You have no children to remove'));
     return $scope.profile.children.splice($index, 1);
   };
 
+  $scope.hideRemoveChild = function () {
+    if($scope.profile.children.length === 0){
+      return false
+    } else {
+      return true;
+    }
+  }
 
 }
 
