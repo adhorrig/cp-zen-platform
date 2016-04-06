@@ -6,8 +6,6 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
   agreement ,championsForUser, parentsForUser, badgeCategories, dojoAdminsForUser, usSpinnerService, atomicNotifyService) {
 
   $scope.referer = $state.params.referer;
-  console.table($state.params);
-  console.log("this is document.referrer "+document.referrer);
 
   if(profile.err || loggedInUser.err || usersDojos.err || hiddenFields.err || agreement.err){
     alertService.showError($translate.instant('error.general'));
