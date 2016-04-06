@@ -290,5 +290,13 @@ function loginCtrl($state, $stateParams, $scope, $rootScope, $location, $window,
     }
   });
 
+  $scope.showBanner = function () {
+    if(path.indexOf("/dojo")>=0){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   $scope.recap = {publicKey: '6LfVKQgTAAAAAF3wUs0q-vfrtsKdHO1HCAkp6pnY'};
 }

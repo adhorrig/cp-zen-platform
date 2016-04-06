@@ -166,7 +166,7 @@
             </label>
           </div>
         </div>
-        <legend class="legend-color-1-border">{@i18n key="Got a child? Add them below"/}</legend>
+        <!--<legend class="legend-color-1-border">{@i18n key="Got a child? Add them below"/}</legend>
         <div class="margin-top-point-5-em" ng-show="abilityToAddChildren()">
           <span class="icon-group">Remove child</span>
           <button type="button" ng-bootbox-confirm="{@i18n key="Are you sure you want to remove this child?"/}" ng-bootbox-confirm-action="removeChild($index)" class="btn btn-danger margin-point-5-em session-expand-button">
@@ -230,7 +230,7 @@
           <button type="button" ng-click="addChild()" class="btn btn-success session-expand-button">
             <span class="glyphicon glyphicon-plus"></span>
           </button>
-        </div>
+        </div>-->
         <div ng-if="hasAccess(profile.userTypes, ['attendee-o13']) && !profile.id">
           <div class="form-group" ng-enter="noop()">
             <label for="password" class="col-sm-4 control-label">{@i18n key="Password"/} </label>
