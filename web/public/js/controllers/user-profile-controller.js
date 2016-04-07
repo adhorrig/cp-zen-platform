@@ -248,7 +248,7 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
 
   $scope.parentProfile = _.contains(profile.data.userTypes, 'parent-guardian');
 
-  $scope.save = function(profile){
+  $scope.save = function(profile, child){
     _.each(['http://', 'https://', 'www.'], function(prefix){
       _.each(['linkedin', 'twitter'], function(field){
         // if prefixed, remove prefix
@@ -259,20 +259,24 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
       });
     });
 
+    console.table($scope.profile.children);
+
     var profileCopy = angular.copy(profile);
+    var childrenCopy = $scope.profile.children;
 
     profileCopy = _.omit(profileCopy, ['countryName', 'countryNumber', 'ownProfileFlag', 'widget', 'dojos',
       'passwordConfirm', 'myChild', 'resolvedChildren', 'resolvedParents', 'isTicketingAdmin',
       'formattedDateOfBirth', 'user', 'userTypeTitle', 'requestingUserIsDojoAdmin', 'requestingUserIsChampion', 'requestingOwnProfile']);
 
-    if($stateParams.userType === 'attendee-o13' || $stateParams.userType === 'attendee-u13' || profile.myChild){
-      saveYouthViaParent(profileCopy);
+    if($scope.profile.children.length >=1) {
+      saveDirect(profileCopy);
+      saveYouthViaParent(childrenCopy);
     } else {
       saveDirect(profileCopy);
     }
   };
 
-  function saveYouthViaParent(profile){
+  function saveYouthViaParent(child){
     profile = _.omit(profile, ['dojos']);
     profile.programmingLanguages = profile.programmingLanguages && utils.frTags(profile.programmingLanguages);
     profile.languagesSpoken = profile.languagesSpoken && utils.frTags(profile.languagesSpoken);
@@ -586,7 +590,7 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
     return true;
   };
 
-  $scope.profile.children = [{childName: null, childAlias: null, childDateOfBirth:null, childEmail: null, childGender: null}];
+  $scope.profile.children = [{name: null, alias: null, dateOfBirth:null, email: null, gender: null}];
 
   $scope.addChild = function () {
     if($scope.profile.children.length === 10) return alertService.showError($translate.instant('You can only have a maximum of ten children'));
