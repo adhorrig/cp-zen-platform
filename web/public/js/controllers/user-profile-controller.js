@@ -287,14 +287,14 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
         error_string = response.error === 'nick-exists' ? $translate.instant('user name already exists') : response.error;
         return alertService.showError($translate.instant('An error has occurred while saving profile') + ': ' + error_string);
       }
-      alertService.showAlert($translate.instant('Profile has been saved successfully'));
+      alertService.showAlert($translate.instant('Youth profile has been saved successfully'));
       if($scope.referer){
         $window.location.href = $scope.referer;
       } else {
         $state.go('user-profile', {userId: response.userId});
       }
     }, function(){
-      alertService.showError($translate.instant('An error has occurred while saving profile'));
+      alertService.showError($translate.instant('An error has occurred while saving youth profile'));
     });
   }
 
