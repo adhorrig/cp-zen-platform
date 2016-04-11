@@ -928,6 +928,9 @@ msgstr "Join Mailing List"
 msgid "I have read and accept the"
 msgstr "I have read and accept the"
 
+msgid "Terms and Conditions here"
+msgstr "Terms and Conditions here"
+
 msgid "Terms of Service here"
 msgstr "Terms of Service here"
 
