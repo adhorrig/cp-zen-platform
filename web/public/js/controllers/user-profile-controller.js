@@ -248,7 +248,7 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
 
   $scope.parentProfile = _.contains(profile.data.userTypes, 'parent-guardian');
 
-  $scope.save = function(profile, child){
+  $scope.save = function(profile){
     _.each(['http://', 'https://', 'www.'], function(prefix){
       _.each(['linkedin', 'twitter'], function(field){
         // if prefixed, remove prefix
@@ -259,24 +259,41 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
       });
     });
 
-    console.table($scope.profile.children);
-
     var profileCopy = angular.copy(profile);
-    var childrenCopy = $scope.profile.children;
 
     profileCopy = _.omit(profileCopy, ['countryName', 'countryNumber', 'ownProfileFlag', 'widget', 'dojos',
       'passwordConfirm', 'myChild', 'resolvedChildren', 'resolvedParents', 'isTicketingAdmin',
-      'formattedDateOfBirth', 'user', 'userTypeTitle', 'requestingUserIsDojoAdmin', 'requestingUserIsChampion', 'requestingOwnProfile']);
+      'formattedDateOfBirth', 'user', 'userTypeTitle', 'requestingUserIsDojoAdmin', 'requestingUserIsChampion', 'requestingOwnProfile',
+       'isOpen']);
+
+    var childrenCopy = _.omit(profileCopy, ['address','alpha3','avatar','badges','countryname',
+      'countrynumber','email','entity$','gender','userId','languageSpoken','lastEdited','linkedin','ninjaInvites',
+      'notes','optionalHiddenFields','parentInvites','phone','projects','state','twitter','userType','userTypes',
+      'parents', 'requiredFieldsComplete', 'id', 'children']);
 
     if($scope.profile.children.length >=1) {
       saveDirect(profileCopy);
-      saveYouthViaParent(childrenCopy);
+      for(var i = 0; i < $scope.profile.children.length; i++){
+        var child = $scope.profile.children[i];
+        childrenCopy.name = child.name;
+        childrenCopy.alias = child.alias;
+        childrenCopy.dob = child.dateOfBirth;
+        childrenCopy.gender = child.gender;
+        childrenCopy.email = child.email;
+        if(getAge(child.dateOfBirth) >=13){
+          childrenCopy.userTypes = ['attendee-o13'];
+        } else {
+          childrenCopy.userTypes = ['attendee-u13'];
+        }
+        saveYouthViaParent(childrenCopy);
+      }
     } else {
       saveDirect(profileCopy);
     }
   };
 
-  function saveYouthViaParent(child){
+  function saveYouthViaParent(profile){
+
     profile = _.omit(profile, ['dojos']);
     profile.programmingLanguages = profile.programmingLanguages && utils.frTags(profile.programmingLanguages);
     profile.languagesSpoken = profile.languagesSpoken && utils.frTags(profile.languagesSpoken);
@@ -285,7 +302,7 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
       if(response && response.error){
         var error_string = "";
         error_string = response.error === 'nick-exists' ? $translate.instant('user name already exists') : response.error;
-        return alertService.showError($translate.instant('An error has occurred while saving profile') + ': ' + error_string);
+        return alertService.showError($translate.instant('An error has occurred while saving youth profile') + ': ' + error_string);
       }
       alertService.showAlert($translate.instant('Youth profile has been saved successfully'));
       if($scope.referer){
@@ -299,7 +316,7 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
   }
 
   function saveDirect(profile){
-    profile = _.omit(profile, ['userTypes', 'dojos']);
+    profile = _.omit(profile, ['userTypes', 'dojos', 'children']);
 
     profile.programmingLanguages = profile.programmingLanguages && utils.frTags(profile.programmingLanguages);
     profile.languagesSpoken = profile.languagesSpoken && utils.frTags(profile.languagesSpoken);
@@ -614,6 +631,12 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
     } else {
       return true;
     }
+  }
+
+  function getAge(birthday) {
+    var ageDifMs = Date.now() - birthday.getTime();
+    var ageDate = new Date(ageDifMs); 
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
   }
 
 }

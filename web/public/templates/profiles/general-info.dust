@@ -21,7 +21,7 @@
         <p ng-if="profile.alias">{@i18n key="Alias"/}: {{ profile.alias }}</p>
         <p ng-if="profile.notes">{{ profile.notes }}</p>
       </div>
-      <form id="generalInfoForm" name="generalInfoForm" class="form-horizontal"  novalidate angular-validator angular-validator-submit="save(profile, child)" role="form" ng-if="profile.ownProfileFlag || profile.myChild || parentProfile">
+      <form id="generalInfoForm" name="generalInfoForm" class="form-horizontal"  novalidate angular-validator angular-validator-submit="save(profile)" role="form" ng-if="profile.ownProfileFlag || profile.myChild || parentProfile">
 
         <div class="form-group" ng-enter="noop()">
           <label for="fullname" class="col-sm-4 control-label">{@i18n key="Name"/}* </label>
@@ -179,8 +179,8 @@
           </div>
         </div>
 
-        <legend class="legend-color-1-border">{@i18n key="Got a child? Add them below"/}</legend>
-        <div class="margin-top-point-5-em" ng-show="abilityToAddChildren(); hideRemoveChild()">
+        <legend ng-show="abilityToAddChildren()" class="legend-color-1-border">{@i18n key="Got a child? Add them below"/}</legend>
+        <div class="margin-top-point-5-em" ng-show="abilityToAddChildren()" ng-show="hideRemoveChild()">
           <span class="icon-group">Remove child</span>
           <button type="button" ng-bootbox-confirm="{@i18n key="Are you sure you want to remove this child?"/}" ng-bootbox-confirm-action="removeChild($index)" class="btn btn-danger margin-point-5-em session-expand-button">
             <span class="glyphicon glyphicon-minus"></span>
