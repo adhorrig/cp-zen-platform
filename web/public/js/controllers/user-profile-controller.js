@@ -271,80 +271,96 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
       'notes','optionalHiddenFields','parentInvites','phone','projects','state','twitter','userType','userTypes',
       'parents', 'requiredFieldsComplete', 'id', 'children']);
 
-    if($scope.profile.children.length >=1) {
-      saveDirect(profileCopy);
-      for(var i = 0; i < $scope.profile.children.length; i++){
-        var child = $scope.profile.children[i];
-        childrenCopy.name = child.name;
-        childrenCopy.alias = child.alias;
-        childrenCopy.dob = child.dateOfBirth;
-        childrenCopy.gender = child.gender;
-        childrenCopy.email = child.email;
-        if(getAge(child.dateOfBirth) >=13){
-          childrenCopy.userTypes = ['attendee-o13'];
-        } else {
-          childrenCopy.userTypes = ['attendee-u13'];
+      async.series([
+        function(callback){
+          saveDirect(profileCopy, callback);
+        },
+        function(callback){
+          if($scope.profile.children.length >=1) {
+            async.mapSeries($scope.profile.children, function(child, doneChild){
+              childrenCopy.name = child.name;
+              childrenCopy.alias = child.alias;
+              childrenCopy.dob = child.dateOfBirth;
+              childrenCopy.gender = child.gender;
+              childrenCopy.email = child.email;
+              childrenCopy.parents = [profileCopy.id];
+              if(getAge(child.dateOfBirth) >=13){
+                childrenCopy.userTypes = ['attendee-o13'];
+              } else {
+                childrenCopy.userTypes = ['attendee-u13'];
+              }
+              saveYouthViaParent(childrenCopy, doneChild);
+            }, function(err, results){
+              callback(err, results);
+            });
+          }
         }
-        saveYouthViaParent(childrenCopy);
-      }
-    } else {
-      saveDirect(profileCopy);
-    }
+      ], function (err, results) {
+          results = _.flatten(results);
+          var messages = [];
+          //  Server error
+          if (err) {
+            return alertService.showError($translate.instant('An error has occurred while saving profile'));
+          } else { // Functional errors
+            var errorous = false;
+            _.each( results, function (result) {
+              if(result && result.error){
+                var error_string = "";
+                error_string = result.error === 'nick-exists' ? $translate.instant('user name already exists') : result.error;
+                messages.push($translate.instant('An error has occurred while saving youth profile') + ': ' + error_string);
+                errorous = true;
+              }
+              if (result && result.ok === false) {
+                messages.push($translate.instant(result.why));
+                errorous = true;
+                $state.go('user-profile', {userId: $stateParams.userId});
+              } else {
+                messages.push($translate.instant('Profile has been saved successfully'));
+              }
+            });
+            var message = _.uniq(messages).join('</br>');
+            if(errorous){
+              return alertService.showError(message);
+            } else {
+              $scope.profile = profile;
+              $scope.profile.private =  $scope.profile.private ? "true" : "false";
+              alertService.showAlert(message);
+              auth.instance(function(data){
+                if( data.user ) $rootScope.$broadcast('user-updated', data.user);
+                if($scope.referer){
+                  $window.location.href = $scope.referer;
+                } else {
+                  $state.go('user-profile', {userId: $stateParams.userId});
+                }
+              });
+            }
+          }
+      });
+
   };
 
-  function saveYouthViaParent(profile){
+  function saveYouthViaParent(profile, callback){
 
     profile = _.omit(profile, ['dojos']);
     profile.programmingLanguages = profile.programmingLanguages && utils.frTags(profile.programmingLanguages);
     profile.languagesSpoken = profile.languagesSpoken && utils.frTags(profile.languagesSpoken);
 
-    cdUsersService.saveYouthProfile(profile, function (response) {
-      if(response && response.error){
-        var error_string = "";
-        error_string = response.error === 'nick-exists' ? $translate.instant('user name already exists') : response.error;
-        return alertService.showError($translate.instant('An error has occurred while saving youth profile') + ': ' + error_string);
-      }
-      alertService.showAlert($translate.instant('Youth profile has been saved successfully'));
-      if($scope.referer){
-        $window.location.href = $scope.referer;
-      } else {
-        $state.go('user-profile', {userId: response.userId});
-      }
-    }, function(){
-      alertService.showError($translate.instant('An error has occurred while saving youth profile'));
-    });
+    cdUsersService.saveYouthProfile(profile, saveProfileWorked.bind({callback: callback}), saveProfileFailed);
   }
 
-  function saveDirect(profile){
+  function saveDirect(profile, callback){
     profile = _.omit(profile, ['userTypes', 'dojos', 'children']);
 
     profile.programmingLanguages = profile.programmingLanguages && utils.frTags(profile.programmingLanguages);
     profile.languagesSpoken = profile.languagesSpoken && utils.frTags(profile.languagesSpoken);
 
-    function win(profile){
-      if(profile.ok === false) {
-        alertService.showError($translate.instant(profile.why));
-        $state.go('user-profile', {userId: $stateParams.userId});
-      } else {
-        $scope.profile = profile;
-        $scope.profile.private =  $scope.profile.private ? "true" : "false";
-        alertService.showAlert($translate.instant('Profile has been saved successfully'));
-        auth.instance(function(data){
-          if( data.user ) $rootScope.$broadcast('user-updated', data.user);
-          if($scope.referer){
-            $window.location.href = $scope.referer;
-          } else {
-            $state.go('user-profile', {userId: $stateParams.userId});
-          }
-        });
-      }
-    }
-
-    function fail(){
-      alertService.showError($translate.instant('An error has occurred while saving profile'));
-    }
-
-    cdUsersService.saveProfile(profile, win, fail);
+    cdUsersService.saveProfile(profile, saveProfileWorked.bind({callback: callback}), saveProfileFailed);
+  }
+  function saveProfileWorked (response){
+    this.callback(null, response);
+  }
+  function saveProfileFailed (err){
+    this.callback(err);
   }
 
   $scope.toggleEdit = function(field){
@@ -635,7 +651,7 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
 
   function getAge(birthday) {
     var ageDifMs = Date.now() - birthday.getTime();
-    var ageDate = new Date(ageDifMs); 
+    var ageDate = new Date(ageDifMs);
     return Math.abs(ageDate.getUTCFullYear() - 1970);
   }
 
