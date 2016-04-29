@@ -79,6 +79,9 @@
   }
 
   function fixEventTime(newTime, date){
+    if (!newTime) {
+      return date;
+    }
     newTime = moment.utc(newTime);
     date = moment.utc(date);
     return moment.utc([ date.get('year'), date.get('month'), date.date(),
@@ -331,7 +334,7 @@
     * @param: Object event the selected event from the UI
     */
     $scope.copyEvent = function(event){
-      cdEventsService.getEvent(event.id, function(event){
+      cdEventsService.load(event.id, function(event){
         var utcOffset = moment().utcOffset();
         var firstDate = moment(_.first(event.dates).startTime).subtract(utcOffset, 'minutes');
         var lastDate = moment(_.last(event.dates).endTime).subtract(utcOffset, 'minutes');
@@ -385,10 +388,8 @@
           $scope.weekdayPicker.selection = _.find($scope.weekdayPicker.weekdays, {id: startingDay});
         }
 
-        if (!_.isEqual($scope.eventInfo.city, $scope.dojoInfo.place) ||
-          $scope.eventInfo.address !== $scope.dojoInfo.address1) {
-            $scope.eventInfo.prefillAddress = false;
-        }
+        $scope.eventInfo.prefillAddress = _.isEqual($scope.eventInfo.city, $scope.dojoInfo.place) &&
+          $scope.eventInfo.address === $scope.dojoInfo.address1;
         //remove processed info coming from the db,
         //which are normally not created by the front-end submit process
         delete $scope.eventInfo.dates;
@@ -416,6 +417,7 @@
         cdDojoService.loadDojoUsers({dojoId: dojoId}, function (dojoUsers) {
           var eventUserSelection = {};
           eventUserSelection[dojoId] = [];
+          dojoUsers = dojoUsers.response;
           _.each(dojoUsers, function (dojoUser) {
             eventUserSelection[dojoId].push({userId: dojoUser.id, title: dojoUser.name});
           });
@@ -644,8 +646,12 @@
         }
 
         $scope.eventInfo.country = dojo.country;
-        $scope.eventInfo.dojoAddress = $scope.eventInfo.address = dojo.address1;
-        $scope.eventInfo.dojoCity = $scope.eventInfo.city = dojo.place;
+        $scope.eventInfo.dojoAddress  = dojo.address1;
+        $scope.eventInfo.dojoCity = dojo.place;
+
+        if(!$scope.isEditMode){
+          $scope.prefillDojoAddress();
+        }
 
         var position = [];
         if(dojo.coordinates) {
@@ -699,11 +705,8 @@
     }
 
     function loadDojoUsers(done) {
-      cdDojoService.loadDojoUsers({
-        dojoId: dojoId,
-        limit$: 'NULL'
-      }, function(users) {
-        $scope.dojoUsers = users;
+      cdDojoService.loadDojoUsers({dojoId: dojoId, limit$: 'NULL'}, function(users) {
+        $scope.dojoUsers = users.response;
         done(null, users);
       }, done);
     }
@@ -721,10 +724,10 @@
 
     function loadEvent(done) {
       var eventId = $stateParams.eventId;
+      $scope.eventInfo.prefillAddress = false;
+      $scope.isEditMode = true;
 
-      cdEventsService.getEvent(eventId, function(event) {
-        $scope.isEditMode = true;
-
+      cdEventsService.load(eventId, function(event) {
         var startTime = _.first(event.dates).startTime || moment.utc().toISOString();
         var endTime = _.last(event.dates).endTime || moment.utc().toISOString();
 

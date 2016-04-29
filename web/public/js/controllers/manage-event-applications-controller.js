@@ -70,7 +70,7 @@
       {name: 'other', title: $translate.instant('Other')}
     ];
 
-    cdEventsService.getEvent(eventId, function (event) {
+    cdEventsService.load(eventId, function (event) {
       event.guestListDownloadLink = '/api/2.0/events/export-guest-list/dojo/' + dojoId + '/event/'+ event.id + '/guests';
       event.waitingListDownloadLink = '/api/2.0/events/export-guest-list/dojo/' + dojoId + '/event/'+ event.id + '/waiting';
       event.fullListDownloadLink = '/api/2.0/events/export-guest-list/dojo/' + dojoId + '/event/'+ event.id + '/all';
@@ -428,6 +428,7 @@
         cdDojoService.loadDojoUsers({dojoId: dojoId}, function (dojoUsers) {
           var eventUserSelection = {};
           eventUserSelection[dojoId] = [];
+          dojoUsers = dojoUsers.response;
           _.each(dojoUsers, function (dojoUser) {
             eventUserSelection[dojoId].push({userId: dojoUser.id, title: dojoUser.name});
           });

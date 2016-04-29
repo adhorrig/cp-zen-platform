@@ -23,6 +23,8 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
   });
 
   $scope.editMode = false;
+  $scope.publicMode = false;
+  $scope.publicChampion = false;
   var profileUserId = $state.params.userId;
   var loggedInUserId = loggedInUser.data && loggedInUser.data.id;
   var getHighestUserType = utilsService.getHighestUserType;
@@ -308,7 +310,7 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
             _.each( results, function (result) {
               if(result && result.error){
                 var error_string = "";
-                error_string = result.error === 'nick-exists' ? $translate.instant('user name already exists') : result.error;
+                error_string = result.error === 'nick-exists' ? $translate.instant('Alias already exists.') : result.error;
                 messages.push($translate.instant('An error has occurred while saving youth profile') + ': ' + error_string);
                 errorous = true;
               }
@@ -346,7 +348,6 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
     profile = _.omit(profile, ['dojos']);
     profile.programmingLanguages = profile.programmingLanguages && utils.frTags(profile.programmingLanguages);
     profile.languagesSpoken = profile.languagesSpoken && utils.frTags(profile.languagesSpoken);
-
     cdUsersService.saveYouthProfile(profile, saveProfileWorked.bind({callback: callback}), saveProfileFailed);
   }
 
@@ -464,6 +465,15 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
 
   $scope.viewProfile = function () {
     $state.go('user-profile', {userId: $stateParams.userId});
+  }
+
+  $scope.publicProfile = function () {
+    var highestUserType = getHighestUserType(profile.data.userTypes);
+    $scope.publicMode = !$scope.publicMode;
+    if (highestUserType === 'champion') {
+      $scope.publicMode = false;
+      $scope.publicChampion = !$scope.publicChampion;
+    }
   }
 
   $scope.viewDojo = function(dojo) {
