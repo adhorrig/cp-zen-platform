@@ -1177,6 +1177,9 @@ msgstr "Thank you for registering. Your CoderDojo account has been successfully 
 msgid "user name already exists"
 msgstr "user name already exists"
 
+msgid "Alias already exists."
+msgstr "Alias already exists."
+
 msgid "server error"
 msgstr "server error"
 
@@ -3003,3 +3006,6 @@ msgstr "You must choose an event"
 
 msgid "Tickets Now Available for"
 msgstr "Tickets Now Available for"
+
+msgid "Terms and Conditions here"
+msgstr "Terms and Conditions here"
