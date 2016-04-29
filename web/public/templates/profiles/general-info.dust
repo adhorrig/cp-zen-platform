@@ -1,12 +1,4 @@
 <div ng-if="editMode">
-  <div class="alert alert-info" ng-show="initialForm()">
-    <strong>{@i18n key="Registering for an event?"/}</strong><br />
-    {@i18n key="If you need to book in to a Dojo event, you need to fill out your profile first."/}
-    <div ng-if="parentProfile">
-      {@i18n key="Then you will need to <a href=\"#youths\">add youths</a> to your profile."/}
-    </div>
-     {@i18n key="Following this you may <a href=\"/\">find your local Dojo</a> and book an event on the Dojo listing page."/}
-  </div>
   <div class="alert alert-info" ng-if="parentProfile" ng-show="initialForm()">
     {@i18n key="Only your username and profile picture are publicly viewable. Other fields are for administration purposes only."/}
   </div>
@@ -180,74 +172,76 @@
         </div>
 
         <legend ng-show="abilityToAddChildren()" class="legend-color-1-border">{@i18n key="Got a child? Add them below"/}</legend>
-        <div class="margin-top-point-5-em" ng-show="abilityToAddChildren()" ng-show="hideRemoveChild()">
-          <span class="icon-group">Remove child</span>
-          <button type="button" ng-bootbox-confirm="{@i18n key="Are you sure you want to remove this child?"/}" ng-bootbox-confirm-action="removeChild($index)" class="btn btn-danger margin-point-5-em session-expand-button">
-            <span class="glyphicon glyphicon-minus"></span>
-          </button>
-        </div>
+        <div ng-show="afterForm()">
+          <div class="margin-top-point-5-em" ng-show="abilityToAddChildren()">
+            <span class="icon-group">Remove child</span>
+            <button type="button" ng-bootbox-confirm="{@i18n key="Are you sure you want to remove this child?"/}" ng-bootbox-confirm-action="removeChild($index)" class="btn btn-danger margin-point-5-em session-expand-button">
+              <span class="glyphicon glyphicon-minus"></span>
+            </button>
+          </div>
 
-        <div class="margin-top-point-5-em clearfix" ng-repeat="child in profile.children" ng-init="childIndex = $index" ng-show="abilityToAddChildren()">
-          <label> Childrens details </label>
-          <div class="form-group" ng-enter="noop()">
-            <label for="childName" class="col-sm-4 control-label">{@i18n key="Child Name"/}* </label>
-            <div class="col-sm-8">
-              <input name="childFullname-{{ $index }}" type="text" required required-message="'{@i18n key="Name is required"/}'"class="form-control" id="childFullname" placeholder="{@i18n key="Name"/}" ng-model="child.name">
+          <div class="margin-top-point-5-em clearfix" ng-repeat="child in profile.children" ng-init="childIndex = $index" ng-show="abilityToAddChildren()">
+            <label> Childrens details </label>
+            <div class="form-group" ng-enter="noop()">
+              <label for="childName" class="col-sm-4 control-label">{@i18n key="Child Name"/}* </label>
+              <div class="col-sm-8">
+                <input name="childFullname-{{ $index }}" type="text" required required-message="'{@i18n key="Name is required"/}'"class="form-control" id="childFullname" placeholder="{@i18n key="Name"/}" ng-model="child.name">
+              </div>
+            </div>
+
+            <div class="form-group" ng-enter="noop()">
+              <label for="childAlias" class="col-sm-4 control-label">{@i18n key="Child Alias"/}* <span tooltip="{@i18n key="The alias is a nickname which your child would have while using the Zen platform"/}" tooltip-placement="right" class="glyphicon glyphicon-info-sign"></span></label>
+              <div class="col-sm-8">
+                <input name="childAlias-{{ $index }}" type="text" required required-message="'{@i18n key="Alias is required"/}'" class="form-control" id="childAlias" placeholder="{@i18n key="Alias"/}" ng-model="child.alias">
+              </div>
+            </div>
+
+            <div class="form-group" ng-enter="noop()">
+              <label for="childDateOfBirth" class="col-sm-4 text-right">{@i18n key="Child Date of Birth"/}*</label>
+              <div class="input-group col-sm-8" style="padding-right: 15px; padding-left: 15px;">
+                <input type="text" class="form-control" readonly datepicker-popup="{{ fullDateFormat }}" datepicker-options="childDobDateOptions" min-date="'1900-01-01'" max-date="today" ng-model="child.dateOfBirth" name="childDateOfBirth-{{ $index }}" required-message="'{@i18n key="Date of birth is empty"/}'" is-open="child.isOpen" required current-text="{@i18n key="Today"/}" clear-text="{@i18n key="Clear"/}" close-text="{@i18n key="Done"/}" placeholder="{@i18n key="Enter your childs date of birth here..."/}" ng-click="open($event, child)" />
+                <span class="input-group-btn" ng-class="{'topValign':generalInfoForm.$submitted && generalInfoForm.dateOfBirth.$error.required}">
+                  <button type="button" class="btn btn-default" ng-click="open($event, child)"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group" ng-enter="noop()">
+              <label for="email" class="col-sm-4 control-label">{@i18n key="Email"/}<span ng-if="isEmailRequired()"></span></label>
+              <div class="col-sm-8">
+                <input type="email" ng-required="isEmailRequired()" required-message="'{@i18n key="Email is required"/}'" class="form-control" id="childEmail" name="childEmail" ng-required="true" placeholder="{@i18n key="Child Email"/}" ng-model="child.email">
+              </div>
+            </div>
+
+            <div class="form-group form-inline">
+              <label class="col-sm-4 control-label" for="childGender-selection">{@i18n key="Child Gender"/}:</label>
+              <div class="radio">
+                <input type="radio" ng-model="child.gender" name="childGender-{{ $index }}" id="female" value="Female">
+                <label for="female">
+                  {@i18n key="Female"/}
+                </label>
+              </div>
+              <div class="radio">
+                <input type="radio" ng-model="child.gender" name="childGender-{{ $index }}" id="male" value="Male">
+                <label for="male">
+                  {@i18n key="Male"/}
+                </label>
+              </div>
+              <div class="radio">
+                <input type="radio" ng-model="child.gender" name="childGender- {{ $index }}" id="undisclosed" value="Undisclosed">
+                <label for="undisclosed">
+                  {@i18n key="Undisclosed"/}
+                </label>
+              </div>
             </div>
           </div>
 
-          <div class="form-group" ng-enter="noop()">
-            <label for="childAlias" class="col-sm-4 control-label">{@i18n key="Child Alias"/}* <span tooltip="{@i18n key="The alias is a nickname which your child would have while using the Zen platform"/}" tooltip-placement="right" class="glyphicon glyphicon-info-sign"></span></label>
-            <div class="col-sm-8">
-              <input name="childAlias-{{ $index }}" type="text" required required-message="'{@i18n key="Alias is required"/}'" class="form-control" id="childAlias" placeholder="{@i18n key="Alias"/}" ng-model="child.alias">
-            </div>
+          <div class="margin-top-point-5-em" ng-show="abilityToAddChildren()">
+            <span class="icon-group">{@i18n key="Add child"/}</span>
+            <button type="button" ng-click="addChild()" class="btn btn-success session-expand-button">
+              <span class="glyphicon glyphicon-plus"></span>
+            </button>
           </div>
-
-          <div class="form-group" ng-enter="noop()">
-            <label for="childDateOfBirth" class="col-sm-4 text-right">{@i18n key="Child Date of Birth"/}*</label>
-            <div class="input-group col-sm-8" style="padding-right: 15px; padding-left: 15px;">
-              <input type="text" class="form-control" readonly datepicker-popup="{{ fullDateFormat }}" datepicker-options="childDobDateOptions" min-date="'1900-01-01'" max-date="today" ng-model="child.dateOfBirth" name="childDateOfBirth-{{ $index }}" required-message="'{@i18n key="Date of birth is empty"/}'" is-open="child.isOpen" required current-text="{@i18n key="Today"/}" clear-text="{@i18n key="Clear"/}" close-text="{@i18n key="Done"/}" placeholder="{@i18n key="Enter your childs date of birth here..."/}" ng-click="open($event, child)" />
-              <span class="input-group-btn" ng-class="{'topValign':generalInfoForm.$submitted && generalInfoForm.dateOfBirth.$error.required}">
-                <button type="button" class="btn btn-default" ng-click="open($event, child)"><i class="glyphicon glyphicon-calendar"></i></button>
-              </span>
-            </div>
-          </div>
-
-          <div class="form-group" ng-enter="noop()">
-            <label for="email" class="col-sm-4 control-label">{@i18n key="Email"/}<span ng-if="isEmailRequired()"></span></label>
-            <div class="col-sm-8">
-              <input type="email" ng-required="isEmailRequired()" required-message="'{@i18n key="Email is required"/}'" class="form-control" id="childEmail" name="childEmail" ng-required="true" placeholder="{@i18n key="Child Email"/}" ng-model="child.email">
-            </div>
-          </div>
-
-          <div class="form-group form-inline">
-            <label class="col-sm-4 control-label" for="childGender-selection">{@i18n key="Child Gender"/}:</label>
-            <div class="radio">
-              <input type="radio" ng-model="child.gender" name="childGender-{{ $index }}" id="female" value="Female">
-              <label for="female">
-                {@i18n key="Female"/}
-              </label>
-            </div>
-            <div class="radio">
-              <input type="radio" ng-model="child.gender" name="childGender-{{ $index }}" id="male" value="Male">
-              <label for="male">
-                {@i18n key="Male"/}
-              </label>
-            </div>
-            <div class="radio">
-              <input type="radio" ng-model="child.gender" name="childGender- {{ $index }}" id="undisclosed" value="Undisclosed">
-              <label for="undisclosed">
-                {@i18n key="Undisclosed"/}
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="margin-top-point-5-em" ng-show="abilityToAddChildren()">
-          <span class="icon-group">{@i18n key="Add child"/}</span>
-          <button type="button" ng-click="addChild()" class="btn btn-success session-expand-button">
-            <span class="glyphicon glyphicon-plus"></span>
-          </button>
         </div>
 
         <div ng-if="hasAccess(profile.userTypes, ['attendee-o13']) && !profile.id">

@@ -247,7 +247,6 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
   }
 
   $scope.parentProfile = _.contains(profile.data.userTypes, 'parent-guardian');
-
   $scope.save = function(profile){
     _.each(['http://', 'https://', 'www.'], function(prefix){
       _.each(['linkedin', 'twitter'], function(field){
@@ -258,6 +257,9 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
         }
       });
     });
+
+    //slug: dashboard/dojo/za/cape-town-western-cape/cape-town;
+
 
     var profileCopy = angular.copy(profile);
 
@@ -313,9 +315,9 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
               if (result && result.ok === false) {
                 messages.push($translate.instant(result.why));
                 errorous = true;
-                $state.go('user-profile', {userId: $stateParams.userId});
+                $window.location.href = goTo();
               } else {
-                messages.push($translate.instant('Profile has been saved successfully'));
+                messages.push($translate.instant('Profile(s) have been saved successfully'));
               }
             });
             var message = _.uniq(messages).join('</br>');
@@ -330,7 +332,7 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
                 if($scope.referer){
                   $window.location.href = $scope.referer;
                 } else {
-                  $state.go('user-profile', {userId: $stateParams.userId});
+                  $window.location.href = goTo();
                 }
               });
             }
@@ -608,10 +610,18 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
   };
 
   $scope.initialForm = function () {
-    if(document.referrer === 'http://localhost:8000/register'){
+    if(document.referrer.indexOf('/register')>=0){
       return false;
     } else {
       return true;
+    }
+  }
+
+  $scope.afterForm = function () {
+    if(document.referrer.indexOf('/register')>=0){
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -626,7 +636,7 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
   $scope.profile.children = [{name: null, alias: null, dateOfBirth:null, email: null, gender: null}];
 
   $scope.addChild = function () {
-    if($scope.profile.children.length === 10) return alertService.showError($translate.instant('You can only have a maximum of ten children'));
+    if($scope.profile.children.length === 20) return alertService.showError($translate.instant('You can only have a maximum of twenty children on this form. More can be added once your account has been created.'));
     var child = {
       name: null,
       alias: null,
@@ -643,7 +653,7 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
 
   $scope.hideRemoveChild = function () {
     if($scope.profile.children.length === 0){
-      return false
+      return false;
     } else {
       return true;
     }
@@ -653,6 +663,21 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
     var ageDifMs = Date.now() - birthday.getTime();
     var ageDate = new Date(ageDifMs);
     return Math.abs(ageDate.getUTCFullYear() - 1970);
+  }
+
+  function goTo(){
+    var userId = $stateParams.userId;
+    var urlSlug = document.cookie.replace(/(?:(?:^|.*;\s*)dojoUrlSlug\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    if(urlSlug.indexOf("/dojo")>=0){
+      return urlSlug;
+    } else {
+      removeCookie(urlSlug);
+      return '/dashboard/profile/'+userId;
+    }
+  }
+
+  function removeCookie(name){
+    document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
   }
 
 }

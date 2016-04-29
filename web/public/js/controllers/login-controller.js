@@ -4,6 +4,8 @@ angular.module('cpZenPlatform').controller('login', ['$state', '$stateParams', '
   'auth', 'alertService', '$translate', 'cdUsersService', 'cdConfigService', 'utilsService', 'vcRecaptchaService', '$localStorage',
   'usSpinnerService', '$cookieStore', 'cdDojoService', '$q', loginCtrl]);
 
+
+
 function loginCtrl($state, $stateParams, $scope, $rootScope, $location, $window,
   auth, alertService, $translate, cdUsersService, cdConfigService, utilsService, vcRecaptchaService, $localStorage,
   usSpinnerService, $cookieStore, cdDojoService, $q) {
@@ -129,6 +131,8 @@ function loginCtrl($state, $stateParams, $scope, $rootScope, $location, $window,
     user.emailSubject = $translate.instant('Welcome to Zen, the CoderDojo community platform.');
 
     auth.register(user, function(data) {
+      $scope.referer = $scope.referer && $scope.referer.indexOf("/dashboard/") === -1 ? '/dashboard' + $scope.referer : $scope.referer;
+      document.cookie = 'dojoUrlSlug='+$scope.referer+'; expires=Wed, 1 Jan 2070 13:47:11 UTC; path=/';
       if(data.ok) {
         auth.login(user, function(data) {
           var initUserTypeStr = data.user && data.user.initUserType;
@@ -136,8 +140,7 @@ function loginCtrl($state, $stateParams, $scope, $rootScope, $location, $window,
           if(initUserType.name === 'champion'){
             $window.location.href = '/dashboard/start-dojo';
           } else {
-            $scope.referer = $scope.referer && $scope.referer.indexOf("/dashboard/") === -1 ? '/dashboard' + $scope.referer : $scope.referer;
-            $window.location.href = $scope.referer || '/dashboard/profile/' + data.user.id + '/edit';
+            $window.location.href = '/dashboard/profile/' + data.user.id + '/edit';
           }
         });
       } else {

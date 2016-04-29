@@ -1,7 +1,7 @@
 'use strict';
 /* global google */
 
-function cdDojoDetailCtrl($scope, $state, $location, cdDojoService, cdUsersService, alertService, usSpinnerService, auth, dojo, gmap, $translate, currentUser) {
+function cdDojoDetailCtrl($scope, $state, $location, cdDojoService, cdUsersService, alertService, usSpinnerService, auth, dojo, gmap, $translate, currentUser, dojoUtils) {
   $scope.dojo = dojo;
   $scope.model = {};
   $scope.markers = [];
@@ -91,62 +91,6 @@ function cdDojoDetailCtrl($scope, $state, $location, cdDojoService, cdUsersServi
     return $scope.approvalRequired = false;
   };
 
-  $scope.requestToJoin = function (requestInvite) {
-    if(!$scope.requestInvite.userType) {
-      $scope.requestInvite.validate="false";
-      return
-    } else {
-      var userType = requestInvite.userType.name;
-
-      auth.get_loggedin_user(function (user) {
-        usSpinnerService.spin('dojo-detail-spinner');
-        var data = {user:user, dojoId:dojo.id, userType:userType, emailSubject: $translate.instant('New Request to join your Dojo')};
-
-        if(_.contains(approvalRequired, userType)) {
-          cdDojoService.requestInvite(data, function (response) {
-            usSpinnerService.stop('dojo-detail-spinner');
-            if(!response.error) {
-              alertService.showAlert($translate.instant('Join Request Sent'));
-            } else {
-              alertService.showError($translate.instant(response.error));
-            }
-          });
-        } else {
-          //Check if user is already a member of this Dojo
-          var query = {userId:user.id, dojoId:dojo.id};
-          var userDojo = {};
-          cdDojoService.getUsersDojos(query, function (response) {
-            if(_.isEmpty(response)) {
-              //Save
-              userDojo.owner = 0;
-              userDojo.userId = user.id;
-              userDojo.dojoId = dojo.id;
-              userDojo.userTypes = [userType];
-              cdDojoService.saveUsersDojos(userDojo, function (response) {
-                usSpinnerService.stop('dojo-detail-spinner');
-                $state.go($state.current, {}, {reload: true});
-                alertService.showAlert($translate.instant('Successfully Joined Dojo'));
-              });
-            } else {
-              //Update
-              userDojo = response[0];
-              if(!userDojo.userTypes) userDojo.userTypes = [];
-              userDojo.userTypes.push(userType);
-              cdDojoService.saveUsersDojos(userDojo, function (response) {
-                usSpinnerService.stop('dojo-detail-spinner');
-                $state.go($state.current, {}, {reload: true});
-                alertService.showAlert($translate.instant('Successfully Joined Dojo'));
-              });
-            }
-          });
-        }
-      }, function () {
-        //Not logged in
-        $state.go('register-account', {referer:$location.url(), userType: userType});
-      });
-    }
-  };
-
   $scope.leaveDojo = function () {
     usSpinnerService.spin('dojo-detail-spinner');
     cdDojoService.removeUsersDojosLink({userId: currentUser.id, dojoId: dojo.id, emailSubject: $translate.instant('A user has left your Dojo')}, function (response) {
@@ -157,8 +101,20 @@ function cdDojoDetailCtrl($scope, $state, $location, cdDojoService, cdUsersServi
     });
   }
 
+  function removeCookie(name){
+    document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT,;';
+  }
+
+  $scope.showBanner = function() {
+    var dojoUrlSlug = document.cookie.replace(/(?:(?:^|.*;\s*)dojoUrlSlug\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    if(dojoUrlSlug.indexOf("/dojo")>=0){
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 angular.module('cpZenPlatform')
-  .controller('dojo-detail-controller', ['$scope', '$state', '$location', 'cdDojoService', 'cdUsersService', 'alertService', 'usSpinnerService', 'auth', 'dojo', 'gmap', '$translate', 'currentUser', cdDojoDetailCtrl]);
+  .controller('dojo-detail-controller', ['$scope', '$state', '$location', 'cdDojoService', 'cdUsersService', 'alertService', 'usSpinnerService', 'auth', 'dojo', 'gmap', '$translate', 'currentUser', 'dojoUtils', cdDojoDetailCtrl]);
 
