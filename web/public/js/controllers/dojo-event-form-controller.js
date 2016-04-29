@@ -334,7 +334,7 @@
     * @param: Object event the selected event from the UI
     */
     $scope.copyEvent = function(event){
-      cdEventsService.getEvent(event.id, function(event){
+      cdEventsService.load(event.id, function(event){
         var utcOffset = moment().utcOffset();
         var firstDate = moment(_.first(event.dates).startTime).subtract(utcOffset, 'minutes');
         var lastDate = moment(_.last(event.dates).endTime).subtract(utcOffset, 'minutes');
@@ -727,7 +727,7 @@
       $scope.eventInfo.prefillAddress = false;
       $scope.isEditMode = true;
 
-      cdEventsService.getEvent(eventId, function(event) {
+      cdEventsService.load(eventId, function(event) {
         var startTime = _.first(event.dates).startTime || moment.utc().toISOString();
         var endTime = _.last(event.dates).endTime || moment.utc().toISOString();
 

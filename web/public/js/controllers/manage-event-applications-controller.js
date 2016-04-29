@@ -70,7 +70,7 @@
       {name: 'other', title: $translate.instant('Other')}
     ];
 
-    cdEventsService.getEvent(eventId, function (event) {
+    cdEventsService.load(eventId, function (event) {
       event.guestListDownloadLink = '/api/2.0/events/export-guest-list/dojo/' + dojoId + '/event/'+ event.id + '/guests';
       event.waitingListDownloadLink = '/api/2.0/events/export-guest-list/dojo/' + dojoId + '/event/'+ event.id + '/waiting';
       event.fullListDownloadLink = '/api/2.0/events/export-guest-list/dojo/' + dojoId + '/event/'+ event.id + '/all';
