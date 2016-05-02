@@ -1,6 +1,6 @@
 'use strict';
 
-function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersService, cdDojoService, alertService,
+function cdUserProfileCtrl($scope, $rootScope, $state, $window, $cookieStore, auth, cdUsersService, cdDojoService, alertService,
   $translate, profile, utils, loggedInUser, usersDojos, $stateParams, hiddenFields,
   Upload, cdBadgesService, utilsService, initUserTypes, cdProgrammingLanguagesService,
   agreement ,championsForUser, parentsForUser, badgeCategories, dojoAdminsForUser, usSpinnerService, atomicNotifyService) {
@@ -676,13 +676,16 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
   }
 
   function goTo(){
-    var userId = $stateParams.userId;
+    var dojoUrlSlug = document.cookie.replace(/(?:(?:^|.*;\s*)dojoUrlSlug\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    var eventId = document.cookie.replace(/(?:(?:^|.*;\s*)sessionId\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    var dojoId = document.cookie.replace(/(?:(?:^|.*;\s*)dojoId\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    var path = '/dashboard/dojo/'+dojoId+'/event/'+eventId;
     var urlSlug = document.cookie.replace(/(?:(?:^|.*;\s*)dojoUrlSlug\s*\=\s*([^;]*).*$)|^.*$/, "$1");
     if(urlSlug.indexOf("/dojo")>=0){
-      return urlSlug;
+      return path;
     } else {
       removeCookie(urlSlug);
-      return '/dashboard/profile/'+userId;
+      return '/dashboard/profile/'+$stateParams.userId;;
     }
   }
 
@@ -693,7 +696,7 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersSer
 }
 
 angular.module('cpZenPlatform')
-  .controller('user-profile-controller', ['$scope', '$rootScope', '$state', '$window', 'auth', 'cdUsersService', 'cdDojoService', 'alertService',
+  .controller('user-profile-controller', ['$scope', '$rootScope', '$state', '$window', '$cookieStore', 'auth', 'cdUsersService', 'cdDojoService', 'alertService',
     '$translate', 'profile', 'utilsService', 'loggedInUser', 'usersDojos', '$stateParams',
     'hiddenFields', 'Upload', 'cdBadgesService', 'utilsService', 'initUserTypes', 'cdProgrammingLanguagesService',
     'agreement','championsForUser', 'parentsForUser', 'badgeCategories', 'dojoAdminsForUser', 'usSpinnerService', 'atomicNotifyService', cdUserProfileCtrl]);

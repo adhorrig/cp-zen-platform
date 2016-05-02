@@ -2,6 +2,7 @@
 /* global google */
 
 function cdDojoDetailCtrl($scope, $state, $location, cdDojoService, cdUsersService, alertService, usSpinnerService, auth, dojo, gmap, $translate, currentUser, dojoUtils) {
+  document.cookie = 'dojoId='+dojo.id+'; expires=Wed, 1 Jan 2070 13:47:11 UTC; path=/';
   $scope.dojo = dojo;
   $scope.model = {};
   $scope.markers = [];
@@ -89,6 +90,63 @@ function cdDojoDetailCtrl($scope, $state, $location, cdDojoService, cdUsersServi
   $scope.userTypeSelected = function ($item) {
     if(_.contains(approvalRequired, $item)) return $scope.approvalRequired = true;
     return $scope.approvalRequired = false;
+  };
+
+  $scope.requestToJoin = function (requestInvite) {
+    if(!$scope.requestInvite.userType) {
+      $scope.requestInvite.validate="false";
+      return
+    } else {
+      var userType = requestInvite.userType.name;
+
+      auth.get_loggedin_user(function (user) {
+        usSpinnerService.spin('dojo-detail-spinner');
+        var data = {user:user, dojoId:dojo.id, userType:userType, emailSubject: $translate.instant('New Request to join your Dojo')};
+
+        if(_.contains(approvalRequired, userType)) {
+          cdDojoService.requestInvite(data, function (response) {
+            usSpinnerService.stop('dojo-detail-spinner');
+            if(!response.error) {
+              alertService.showAlert($translate.instant('Join Request Sent'));
+            } else {
+              alertService.showError($translate.instant(response.error));
+            }
+          });
+        } else {
+          //Check if user is already a member of this Dojo
+          var query = {userId:user.id, dojoId:dojo.id};
+          var userDojo = {};
+          cdDojoService.getUsersDojos(query, function (response) {
+            if(_.isEmpty(response)) {
+              //Save
+              userDojo.owner = 0;
+              userDojo.userId = user.id;
+              userDojo.dojoId = dojo.id;
+              userDojo.userTypes = [userType];
+              cdDojoService.saveUsersDojos(userDojo, function (response) {
+                usSpinnerService.stop('dojo-detail-spinner');
+                $state.go($state.current, {}, {reload: true});
+                alertService.showAlert($translate.instant('Successfully Joined Dojo'));
+              });
+            } else {
+              //Update
+              userDojo = response[0];
+              if(!userDojo.userTypes) userDojo.userTypes = [];
+              userDojo.userTypes.push(userType);
+              cdDojoService.saveUsersDojos(userDojo, function (response) {
+                usSpinnerService.stop('dojo-detail-spinner');
+                $state.go($state.current, {}, {reload: true});
+                alertService.showAlert($translate.instant('Successfully Joined Dojo'));
+              });
+            }
+          });
+        }
+      }, function () {
+        //Not logged in
+        $state.go('register-account', {referer:$location.url(), userType: userType});
+      });
+    }
+    removeCookie('dojoUrlSlug');
   };
 
   $scope.leaveDojo = function () {
