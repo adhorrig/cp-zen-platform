@@ -1,8 +1,10 @@
 'use strict';
 /* global google */
 
-function cdDojoDetailCtrl($scope, $state, $location, cdDojoService, cdUsersService, alertService, usSpinnerService, auth, dojo, gmap, $translate, currentUser, dojoUtils) {
-  document.cookie = 'dojoId='+dojo.id+'; expires=Wed, 1 Jan 2070 13:47:11 UTC; path=/';
+function cdDojoDetailCtrl($localStorage, $scope, $state, $location, cdDojoService, cdUsersService, alertService, usSpinnerService, auth, dojo, gmap, $translate, currentUser, dojoUtils) {
+
+  localStorage.setItem('dojoId', dojo.id);
+
   $scope.dojo = dojo;
   $scope.model = {};
   $scope.markers = [];
@@ -146,7 +148,6 @@ function cdDojoDetailCtrl($scope, $state, $location, cdDojoService, cdUsersServi
         $state.go('register-account', {referer:$location.url(), userType: userType});
       });
     }
-    removeCookie('dojoUrlSlug');
   };
 
   $scope.leaveDojo = function () {
@@ -158,21 +159,7 @@ function cdDojoDetailCtrl($scope, $state, $location, cdDojoService, cdUsersServi
       alertService.showError($translate.instant('Error leaving Dojo'));
     });
   }
-
-  function removeCookie(name){
-    document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT,;';
-  }
-
-  $scope.showBanner = function() {
-    var dojoUrlSlug = document.cookie.replace(/(?:(?:^|.*;\s*)dojoUrlSlug\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-    if(dojoUrlSlug.indexOf("/dojo")>=0){
-      return true;
-    } else {
-      return false;
-    }
-  }
 }
 
 angular.module('cpZenPlatform')
-  .controller('dojo-detail-controller', ['$scope', '$state', '$location', 'cdDojoService', 'cdUsersService', 'alertService', 'usSpinnerService', 'auth', 'dojo', 'gmap', '$translate', 'currentUser', 'dojoUtils', cdDojoDetailCtrl]);
-
+  .controller('dojo-detail-controller', ['$localStorage', '$scope', '$state', '$location', 'cdDojoService', 'cdUsersService', 'alertService', 'usSpinnerService', 'auth', 'dojo', 'gmap', '$translate', 'currentUser', 'dojoUtils', cdDojoDetailCtrl]);

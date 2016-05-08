@@ -1,15 +1,35 @@
 (function () {
   'use strict';
 
-  function cdApplyForEventCtrl($scope, $window, $state, $stateParams, $translate, $location, $modal, alertService, cdEventsService, cdUsersService, cdDojoService, usSpinnerService, dojoUtils) {
+  function cdApplyForEventCtrl($localStorage, $scope, $window, $state, $stateParams, $translate, $location, $modal, alertService, cdEventsService, cdUsersService, cdDojoService, usSpinnerService, dojoUtils) {
     var dojoEvents = $scope.dojoRowIndexExpandedCurr;
     var eventIndex = $scope.tableRowIndexExpandedCurr;
+    var accountName;
+    var accountTitle;
 
-    var request = {
-      userType: 'parent-guardian'
+    if(localStorage.children){ //champions and o13s don't take this flow and so are not included below
+      accountName = 'parent-guardian';
+      accountTitle = 'Parent/Guardian';
+    } else {
+      accountName = 'mentor';
+      accountTitle = 'Mentor/Volunteer';
+    }
+
+    var userObject = {
+      userType : {name: accountName, title: accountTitle}, //hash key might be needed here
+      validate: 'false'
     };
 
-    dojoUtils.requestToJoin(request);
+    var url = window.location.href;
+
+    if((localStorage.dojoId) && url.indexOf('event/')>=1){
+      dojoUtils.requestToJoin(userObject);
+      delete localStorage.dojoId;
+      delete localStorage.eventId;
+      delete localStorage.dojoUrlSlug;
+    } else {
+      console.log('hello');
+    }
 
     $scope.cancel = function () {
       if(dojoEvents){
@@ -20,7 +40,7 @@
     }
 
     $scope.showSessionDetails = function (session) {
-      document.cookie = 'sessionId='+session.eventId+'; expires=Wed, 1 Jan 2070 13:47:11 UTC; path=/';
+      localStorage.setItem('eventId', session.eventId);
       if(!_.isEmpty($scope.currentUser)) {
 
         cdDojoService.dojosForUser($scope.currentUser.id, function (dojos) {
@@ -83,13 +103,8 @@
     $scope.goToGoogleMaps = function (position) {
       $window.open('https://maps.google.com/maps?z=12&t=m&q=loc:' + position.lat + '+' + position.lng);
     };
-
-    function removeCookie(name){
-      document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    }
-
   }
 
   angular.module('cpZenPlatform')
-      .controller('apply-for-event-controller', ['$scope', '$window', '$state', '$stateParams', '$translate', '$location', '$modal', 'alertService','cdEventsService', 'cdUsersService', 'cdDojoService', 'usSpinnerService', 'dojoUtils', cdApplyForEventCtrl]);
+      .controller('apply-for-event-controller', ['$localStorage', '$scope', '$window', '$state', '$stateParams', '$translate', '$location', '$modal', 'alertService','cdEventsService', 'cdUsersService', 'cdDojoService', 'usSpinnerService', 'dojoUtils', cdApplyForEventCtrl]);
 })();

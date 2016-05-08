@@ -1,9 +1,9 @@
 'use strict';
 
-function cdUserProfileCtrl($scope, $rootScope, $state, $window, $cookieStore, auth, cdUsersService, cdDojoService, alertService,
+function cdUserProfileCtrl($scope, $rootScope, $state, $window, auth, cdUsersService, cdDojoService, alertService,
   $translate, profile, utils, loggedInUser, usersDojos, $stateParams, hiddenFields,
   Upload, cdBadgesService, utilsService, initUserTypes, cdProgrammingLanguagesService,
-  agreement ,championsForUser, parentsForUser, badgeCategories, dojoAdminsForUser, usSpinnerService, atomicNotifyService) {
+  agreement ,championsForUser, parentsForUser, badgeCategories, dojoAdminsForUser, usSpinnerService, atomicNotifyService, dojoUtils) {
 
   $scope.referer = $state.params.referer;
 
@@ -260,9 +260,6 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, $cookieStore, au
       });
     });
 
-    //slug: dashboard/dojo/za/cape-town-western-cape/cape-town;
-
-
     var profileCopy = angular.copy(profile);
 
     profileCopy = _.omit(profileCopy, ['countryName', 'countryNumber', 'ownProfileFlag', 'widget', 'dojos',
@@ -280,7 +277,8 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, $cookieStore, au
           saveDirect(profileCopy, callback);
         },
         function(callback){
-          if($scope.profile.children.length >=1) {
+          if($scope.profile.children !== null) {
+            localStorage.setItem('children', 'true');
             async.mapSeries($scope.profile.children, function(child, doneChild){
               childrenCopy.name = child.name;
               childrenCopy.alias = child.alias;
@@ -294,6 +292,12 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, $cookieStore, au
                 childrenCopy.userTypes = ['attendee-u13'];
               }
               saveYouthViaParent(childrenCopy, doneChild);
+            }, function(err, results){
+              callback(err, results);
+            });
+          } else {
+            async.mapSeries($scope.profile, function(profile, doneProfile){
+              saveDirect(profileCopy, doneProfile);
             }, function(err, results){
               callback(err, results);
             });
@@ -619,8 +623,8 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, $cookieStore, au
     }
   };
 
-  $scope.initialForm = function () {
-    if(document.referrer.indexOf('/register')>=0){
+  $scope.initialForm = function () { //if no event id, user is not taking flow from dojo through booking
+    if(localStorage.eventId){
       return false;
     } else {
       return true;
@@ -635,9 +639,9 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, $cookieStore, au
     }
   }
 
-  $scope.abilityToAddChildren = function (){
+  $scope.abilityToAddChildren = function (){ //dont show add children section is user is youth or is taking direct registration flow (not from booking event ticket)
     if($scope.profile && ($scope.profile.userTypes.indexOf('attendee-u13') > -1 ||
-       $scope.profile.userTypes.indexOf('attendee-o13') > -1)){
+       $scope.profile.userTypes.indexOf('attendee-o13') > -1) || (!localStorage.eventId)){
       return false;
     }
     return true;
@@ -645,8 +649,8 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, $cookieStore, au
 
   $scope.profile.children = [{name: null, alias: null, dateOfBirth:null, email: null, gender: null}];
 
-  $scope.addChild = function () {
-    if($scope.profile.children.length === 20) return alertService.showError($translate.instant('You can only have a maximum of twenty children on this form. More can be added once your account has been created.'));
+  $scope.addChild = function () { //add another child object
+    if($scope.profile.children.length === 20) return alertService.showError($translate.instant('You can only have a maximum of twenty children. You can add more after registration.'));
     var child = {
       name: null,
       alias: null,
@@ -676,27 +680,25 @@ function cdUserProfileCtrl($scope, $rootScope, $state, $window, $cookieStore, au
   }
 
   function goTo(){
-    var dojoUrlSlug = document.cookie.replace(/(?:(?:^|.*;\s*)dojoUrlSlug\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-    var eventId = document.cookie.replace(/(?:(?:^|.*;\s*)sessionId\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-    var dojoId = document.cookie.replace(/(?:(?:^|.*;\s*)dojoId\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    var eventId = localStorage.getItem('eventId');
+    var dojoId = localStorage.getItem('dojoId');
     var path = '/dashboard/dojo/'+dojoId+'/event/'+eventId;
-    var urlSlug = document.cookie.replace(/(?:(?:^|.*;\s*)dojoUrlSlug\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    var urlSlug = localStorage.getItem('dojoUrlSlug');
     if(urlSlug.indexOf("/dojo")>=0){
       return path;
     } else {
-      removeCookie(urlSlug);
-      return '/dashboard/profile/'+$stateParams.userId;;
+      return '/dashboard/profile/'+$stateParams.userId;
     }
   }
 
-  function removeCookie(name){
-    document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  if(profile.data.userType==='attendee-o13'){ //youth can't have children
+    $scope.profile.children = null;
   }
 
 }
 
 angular.module('cpZenPlatform')
-  .controller('user-profile-controller', ['$scope', '$rootScope', '$state', '$window', '$cookieStore', 'auth', 'cdUsersService', 'cdDojoService', 'alertService',
+  .controller('user-profile-controller', ['$scope', '$rootScope', '$state', '$window', 'auth', 'cdUsersService', 'cdDojoService', 'alertService',
     '$translate', 'profile', 'utilsService', 'loggedInUser', 'usersDojos', '$stateParams',
     'hiddenFields', 'Upload', 'cdBadgesService', 'utilsService', 'initUserTypes', 'cdProgrammingLanguagesService',
-    'agreement','championsForUser', 'parentsForUser', 'badgeCategories', 'dojoAdminsForUser', 'usSpinnerService', 'atomicNotifyService', cdUserProfileCtrl]);
+    'agreement','championsForUser', 'parentsForUser', 'badgeCategories', 'dojoAdminsForUser', 'usSpinnerService', 'atomicNotifyService', 'dojoUtils', cdUserProfileCtrl]);

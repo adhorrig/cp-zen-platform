@@ -2,13 +2,13 @@
 
 angular.module('cpZenPlatform').controller('login', ['$state', '$stateParams', '$scope', '$rootScope', '$location', '$window',
   'auth', 'alertService', '$translate', 'cdUsersService', 'cdConfigService', 'utilsService', 'vcRecaptchaService', '$localStorage',
-  'usSpinnerService', '$cookieStore', 'cdDojoService', '$q', loginCtrl]);
+  'usSpinnerService', '$cookieStore', 'cdDojoService', '$q', 'dojoUtils', loginCtrl]);
 
 
 
 function loginCtrl($state, $stateParams, $scope, $rootScope, $location, $window,
   auth, alertService, $translate, cdUsersService, cdConfigService, utilsService, vcRecaptchaService, $localStorage,
-  usSpinnerService, $cookieStore, cdDojoService, $q) {
+  usSpinnerService, $cookieStore, cdDojoService, $q, dojoUtils) {
 
   $scope.noop = angular.noop
   $scope.referer = $state.params.referer;
@@ -132,7 +132,7 @@ function loginCtrl($state, $stateParams, $scope, $rootScope, $location, $window,
 
     auth.register(user, function(data) {
       $scope.referer = $scope.referer && $scope.referer.indexOf("/dashboard/") === -1 ? '/dashboard' + $scope.referer : $scope.referer;
-      document.cookie = 'dojoUrlSlug='+$scope.referer+'; expires=Wed, 1 Jan 2070 13:47:11 UTC; path=/';
+      localStorage.setItem('dojoUrlSlug', $scope.referer);
       if(data.ok) {
         auth.login(user, function(data) {
           var initUserTypeStr = data.user && data.user.initUserType;
